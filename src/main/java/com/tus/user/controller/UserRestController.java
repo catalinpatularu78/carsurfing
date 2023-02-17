@@ -55,9 +55,10 @@ public class UserRestController {
 			}
 
 		} else {
-			responseCode = ResponseCode.NO_UPDATES;
-			responseMessage = "User " + user.getFirstName() + " " + user.getLastName() + " already exists.";
-			return new Response(responseCode, responseMessage);
+			responseCode = ResponseCode.FAILED;
+			responseMessage = "User " + user.getFirstName() + " " + user.getLastName() + " cannot be registered.";
+			return new ErrorResponse(responseCode, responseMessage,
+					"User with phone number " + user.getPhone() + " already exists.");
 		}
 
 	}
