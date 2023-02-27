@@ -1,0 +1,41 @@
+version: '3'
+services:
+    rideservice-app:
+        container_name: rideservice-app
+        image: rideservice
+        restart: on-failure
+        ports: 
+            - 10555:9091
+        environment: 
+            WAIT_HOSTS: mysql:3306
+        depends_on: 
+            - carsurfing-mysql-db
+    userservice-app:
+        container_name: userservice-app
+        image: userservice
+        restart: on-failure
+        ports: 
+            - 10556:9092
+        environment: 
+            WAIT_HOSTS: mysql:3306
+        depends_on: 
+            - carsurfing-mysql-db
+    carsurfing-mysql-db:
+        container_name: carsurfing-mysql-db
+        image: carsurfing-mysql-db
+        restart: always
+        environment: 
+            MYSQL_DATABASE: carsurfing
+            MYSQL_ROOT_PASSWORD: test1234
+            MYSQL_ROOT_HOST: '%'
+        volumes:
+            - ./sql:/docker-entrypoint-initdb.d
+            - ./mysql-data:/var/lib/mysql
+        ports:
+            - 6666:3306
+        healthcheck:
+            test: "/usr/bin/mysql --user=root --password=test1234 --execute \"SHOW DATABASES \""
+            interval: 4s
+            timeout: 20s
+            retries: 5
+        
