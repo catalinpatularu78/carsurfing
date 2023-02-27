@@ -19,7 +19,8 @@ To test with Docker run the following commands:
 	 (to build the rideservice image)
 	-  docker build -f user-service/Dockerfile -t userservice .
 	  (to build the userservice image)
- - docker-compose up (to start the containers)
+ - docker-compose up (to start the containers). Wait around 1 min until the containers are fully started and healthy.
+ 
  - to test the functionality open HTTP client (e.g. Postman)
  	-  userservice use cases:
  		1.  to add user send POST request to resource URL http://localhost:10556/userapi/users with body
