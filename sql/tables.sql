@@ -58,9 +58,3 @@ insert into user values(0,'Robert','','Smith','funny person','robertS45@yahoo.co
 insert into user values(0,'John','Sean','Kennedy','pet owner','seankennedy777@gmail.com','087689800','Yes');
 insert into user values(0,'Mary','Diana','Fernandez','','fernandezm@gmail.com','0874343563','Yes');
 insert into user values('Mary','Diana','Fernandez','','fernandezm@gmail.com','0874343563','Yes');
-insert into ride values(0, 1,'Galway','Dublin City Center',STR_TO_DATE('15-05-2022', '%d-%m-%Y'),TIME_FORMAT('07:15:00','%T'),'Athlone','Kinnegad', 'Maynooth','3');
-insert into ride values(0, 2,'Cork','Dublin',STR_TO_DATE('22-10-2022', '%d-%m-%Y'),TIME_FORMAT('08:10:00','%T'),'','Gorey','','2');
-insert into bookings values(1,4);
-insert into bookings values(2,3);
-insert into reviews values(0,4,1,1,'The journey was very pleasant with Mary.We laughed all the time, great music.100% recommend','10');
-insert into reviews values(0,3,2,2,'Robert is a nice guy, good driver and right on time','10');
