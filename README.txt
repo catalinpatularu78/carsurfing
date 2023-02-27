@@ -3,6 +3,8 @@ Team B project
 Carsurfing app:
 * Maven project with two modules, both being Spring boot apps.
 * Functionality can be tested using docker-compose.
+* To make changes, checkout local branch. 
+* Push to master only after making sure the functionality is working after testing manually with the services deployed in Docker containers.
 
 To test with Docker run the following commands:
 
