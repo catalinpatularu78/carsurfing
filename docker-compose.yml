@@ -1,30 +1,36 @@
 version: '3'
 services:
+    web-app:
+        container_name: web-app
+        image: 321gillian/carsurfing-web-app
+        restart: on-failure
+        ports:
+            - 3000:3000
     rideservice-app:
         container_name: rideservice-app
         image: rideservice
         restart: on-failure
-        ports: 
+        ports:
             - 10555:9091
-        environment: 
+        environment:
             WAIT_HOSTS: mysql:3306
-        depends_on: 
+        depends_on:
             - carsurfing-mysql-db
     userservice-app:
         container_name: userservice-app
         image: userservice
         restart: on-failure
-        ports: 
+        ports:
             - 10556:9092
-        environment: 
+        environment:
             WAIT_HOSTS: mysql:3306
-        depends_on: 
+        depends_on:
             - carsurfing-mysql-db
     carsurfing-mysql-db:
         container_name: carsurfing-mysql-db
         image: carsurfing-mysql-db
         restart: always
-        environment: 
+        environment:
             MYSQL_DATABASE: carsurfing
             MYSQL_ROOT_PASSWORD: test1234
             MYSQL_ROOT_HOST: '%'
@@ -38,4 +44,3 @@ services:
             interval: 4s
             timeout: 20s
             retries: 5
-        
