@@ -1,9 +1,9 @@
-Team B project 
+Team B project
 
 Carsurfing app:
 * Maven project with two modules, both being Spring boot apps.
 * Functionality can be tested using docker-compose.
-* To make changes, checkout local branch. 
+* To make changes, checkout local branch.
 * Push to master only after making sure the functionality is working after testing manually with the services deployed in Docker containers.
 
 To test with Docker run the following commands:
@@ -15,16 +15,18 @@ To test with Docker run the following commands:
 - build images for each service:
 	-  docker build -t carsurfing-mysql-db .
 	 (to build mysql custom image which includes SQL statements to create the tables and populate the users table. See details in /sql/tables.sql)
-	-  docker build -f ride-service/Dockerfile -t rideservice . 
+	-  docker build -f ride-service/Dockerfile -t rideservice .
 	 (to build the rideservice image)
 	-  docker build -f user-service/Dockerfile -t userservice .
 	  (to build the userservice image)
+	- cd web-app && docker build -f Dockerfile -t web-app .
+	  (to build the userservice image)
  - docker-compose up (to start the containers). Wait around 1 min until the containers are fully started and healthy.
- 
+
  - to test the functionality open HTTP client (e.g. Postman)
  	-  userservice use cases:
  		1.  to add user send POST request to resource URL http://localhost:10556/userapi/users with body
- 		
+
  		(e.g. {
         "firstName": "Alan",
         "middleName": "Sergiu",
@@ -34,14 +36,14 @@ To test with Docker run the following commands:
         "phone": "0875675845",
         "verified": "Yes"
         })
-        
+
     	2. to display all the users send GET request  to resource URL http://localhost:10556/userapi/users
-    	
+
 	- rideservice use cases:
 		1. to add a ride send POST request to resource URL http://localhost:10555/rideapi/rides with body
-		
+
 		( e.g. {
- 
+
         "driverId":1,
         "fromLocation": "Ashbourne",
         "toLocation": "Cork",
@@ -52,9 +54,9 @@ To test with Docker run the following commands:
         "stop2": "",
         "stop3": ""
 		})
-		
+
 		2. to see all rides  send GET request  to resource URL  http://localhost:10555/rideapi/rides
-		
+
 		3. to delete a ride send DELETE request to resource  http://localhost:10555/rideapi/rides/<rideId>
 		(replace <rideID> with an existing id: e.g.  http://localhost:10555/rideapi/rides/1)
-		
+
