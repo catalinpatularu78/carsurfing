@@ -1,11 +1,11 @@
 version: '3'
 services:
-    web-app:
-        container_name: web-app
-        image: 321gillian/carsurfing-web-app
-        restart: on-failure
-        ports:
-            - 3000:3000
+    # web-app:
+    #     container_name: web-app
+    #     image: 321gillian/carsurfing-web-app
+    #     restart: on-failure
+    #     ports:
+    #         - 3000:3000
     rideservice-app:
         container_name: rideservice-app
         image: rideservice
