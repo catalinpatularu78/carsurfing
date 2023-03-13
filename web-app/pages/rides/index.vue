@@ -1,9 +1,9 @@
 <template>
   <div>
     <h1
-      class="text-3xl font-semibold text-teal-400 lg:text-4xl dark:text-white text-center py-5"
+      class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
     >
-      View open journeys
+      View journeys
     </h1>
     <section class="p-3 sm:p-5 mb-7">
       <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
@@ -15,7 +15,7 @@
             <div class="w-full md:w-1/2">
               <form class="flex items-center">
                 <label for="simple-search" class="sr-only">Search</label>
-                <div class="relative w-full">
+                <div class="relative w-full ml-1">
                   <div
                     class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                   >
@@ -34,9 +34,10 @@
                     </svg>
                   </div>
                   <input
+                    v-model="searchQuery"
                     type="text"
                     id="simple-search"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
                     placeholder="Search"
                     required=""
                   />
@@ -48,7 +49,7 @@
             >
               <button
                 type="button"
-                class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                class="flex items-center justify-center text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-teal-600 dark:hover:bg-teal-700 focus:outline-none dark:focus:ring-primary-800"
               >
                 <svg
                   class="h-3.5 w-3.5 mr-2"
@@ -63,7 +64,14 @@
                     d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                   />
                 </svg>
-                Add product
+                <NuxtLink
+                  link="/"
+                  isactive="false"
+                  component="a"
+                  linkattr="href"
+                  to="/rides/new"
+                  >Create a ride</NuxtLink
+                >
               </button>
             </div>
           </div>
@@ -77,32 +85,41 @@
                 <tr>
                   <th scope="col" class="px-4 py-3">Destination</th>
                   <th scope="col" class="px-4 py-3">Start Point</th>
+                  <th scope="col" class="px-4 py-3">Date</th>
                   <th scope="col" class="px-4 py-3">Driver</th>
                   <th scope="col" class="px-4 py-3">Spaces Available</th>
+                  <th scope="col" class="px-4 py-3"></th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="border-b dark:border-gray-700">
+                <tr
+                  v-for="(ride, index) in filteredRides"
+                  :key="index"
+                  class="border-b dark:border-gray-700"
+                >
                   <th
                     scope="row"
                     class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    Athlone
+                    {{ ride.toLocation }}
                   </th>
-                  <td class="px-4 py-3">Newbridge</td>
-                  <td class="px-4 py-3">Patrick C.</td>
-                  <td class="px-4 py-3">3/4</td>
-                </tr>
-                <tr class="border-b dark:border-gray-700">
-                  <th
-                    scope="row"
-                    class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    Limerick
-                  </th>
-                  <td class="px-4 py-3">Athlone</td>
-                  <td class="px-4 py-3">Mary G.</td>
-                  <td class="px-4 py-3">1/4</td>
+                  <td class="px-4 py-3">{{ ride.fromLocation }}</td>
+                  <td class="px-4 py-3">{{ ride.dateOfDeparture }}</td>
+                  <td class="px-4 py-3">{{ ride.driverId }}</td>
+                  <td class="px-4 py-3">
+                    {{ ride.spacesLeft === 0 ? "Full" : ride.spacesLeft }}
+                  </td>
+                  <td class="px-4 py-3">
+                    <NuxtLink
+                      link="/"
+                      isactive="false"
+                      component="a"
+                      linkattr="href"
+                      class="font-medium text-teal-600 dark:text-teal-500 hover:underline"
+                      to="/rides/new"
+                      >View</NuxtLink
+                    >
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -115,19 +132,31 @@
 <script>
 export default {
   setup() {
+    const searchQuery = ref("");
     const rides = ref([]);
     async function getRides() {
       await fetch("http://localhost:10555/rideapi/rides")
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          rides.value = data;
         });
     }
 
-    rides.value = getRides();
+    getRides();
+
+    const filteredRides = computed(() => {
+      if (searchQuery.value.length < 3) return rides.value;
+      return rides.value.filter((ride) => {
+        return (
+          ride.fromLocation.includes(searchQuery.value) ||
+          ride.toLocation.includes(searchQuery.value)
+        );
+      });
+    });
 
     return {
-      rides,
+      searchQuery,
+      filteredRides,
     };
   },
 };

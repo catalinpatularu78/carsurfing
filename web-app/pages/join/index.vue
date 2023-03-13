@@ -7,7 +7,7 @@
     >
       <div class="max-w-sm">
         <h1
-          class="text-3xl font-semibold text-teal-400 lg:text-4xl dark:text-white text-center py-5"
+          class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
         >
           Join CarSurfing
         </h1>
