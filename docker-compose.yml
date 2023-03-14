@@ -9,7 +9,7 @@ services:
         environment: 
             WAIT_HOSTS: mysql:3306
         depends_on: 
-            - carsurfing-mysql-db
+            - carsurfing-mysql
     userservice-app:
         container_name: userservice-app
         image: userservice
@@ -19,10 +19,10 @@ services:
         environment: 
             WAIT_HOSTS: mysql:3306
         depends_on: 
-            - carsurfing-mysql-db
-    carsurfing-mysql-db:
-        container_name: carsurfing-mysql-db
-        image: carsurfing-mysql-db
+            - carsurfing-mysql
+    carsurfing-mysql:
+        container_name: carsurfing-mysql
+        image: carsurfing-mysql
         restart: always
         environment: 
             MYSQL_DATABASE: carsurfing

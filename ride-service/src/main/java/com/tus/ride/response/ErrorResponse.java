@@ -4,7 +4,7 @@ public class ErrorResponse extends Response {
 	String errorCause;
 
 	public ErrorResponse(ResponseCode responseCode, String responseMessage, String reason) {
-		super(responseCode, reason);
+		super(responseCode, responseMessage);
 		this.errorCause = reason;
 	}
 
