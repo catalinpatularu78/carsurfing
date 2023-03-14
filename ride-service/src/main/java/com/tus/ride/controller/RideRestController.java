@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tus.ride.model.Ride;
-import com.tus.ride.repo.BookingRepository;
 import com.tus.ride.repo.RideRepository;
 import com.tus.ride.response.ErrorResponse;
 import com.tus.ride.response.Response;
@@ -36,9 +35,6 @@ public class RideRestController {
 
 	@Autowired
 	private RideRepository rideRepo;
-
-	@Autowired
-	private BookingRepository bookingRepo;
 
 	@GetMapping(value = "/rides")
 	List<Ride> get() {
