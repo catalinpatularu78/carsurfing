@@ -60,7 +60,8 @@ To test with Docker run the following commands:
 		3. to delete a ride send DELETE request to resource  http://localhost:10555/rideapi/rides/<rideId>
 		(replace <rideID> with an existing id: e.g.  http://localhost:10555/rideapi/rides/1)
 
-		4. to search for a ride by from/to location and date send POST request to resource URL http://localhost:10555/rideapi/ridesForRouteAndDate with body
+		4. to search for a ride by from/to location and date send POST request to resource URL 
+		http://localhost:10555/rideapi/ridesForRouteAndDate with body
 		e.g.
 		 {
         		"fromLocation": "Cork",
@@ -69,7 +70,8 @@ To test with Docker run the following commands:
 
     		}
 			NOTE:
-			1. From/to location can be also one of the stops. From/to in the above doesn't mean necessarily start location and final destination. It means 				from/to from the customer POV.
+			1. From/to location can be also one of the stops. From/to in the above doesn't
+			mean necessarily start location and final destination. It means from/to from the customer POV.
 			2. An empty list is returned in the following conditions:
 			* ride doesn't exist.
 			* From is the same as to location.
