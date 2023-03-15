@@ -16,8 +16,8 @@
       <p class="text-gray-500 dark:text-gray-300 mr-4">Stops:</p>
       <p class="text-gray-500 dark:text-gray-300">
         {{ ride.stop1 }}
-        <template v-if="ride.stop2">{{ ", " + ride.stop2 }}</template>
-        <template v-if="ride.stop3">{{ ", " + ride.stop3 }}</template>
+        <template v-if="ride.stop2">{{ "- " + ride.stop2 }}</template>
+        <template v-if="ride.stop3">{{ "- " + ride.stop3 }}</template>
       </p>
     </div>
   </div>
