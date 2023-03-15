@@ -1,6 +1,7 @@
 package com.tus.ride.repo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -35,5 +36,7 @@ public interface RideRepository extends JpaRepository<Ride, Integer> {
 			+ " r.stop_1 = :fromLocation and r.stop_3=:toLocation or"
 			+ " r.stop_2 = :fromLocation and r.stop_3=:toLocation ", nativeQuery = true)
 	List<Ride> findByFromLocationAndToLocation(String fromLocation, String toLocation);
+
+	Optional<Ride> findById(Long rideId);
 
 }
