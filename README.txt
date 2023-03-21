@@ -20,12 +20,15 @@ To test with Docker run the following commands:
 	-  docker build -f user-service/Dockerfile -t userservice .
 	  (to build the userservice image)
 	- cd web-app && docker build -f Dockerfile -t web-app .
-	  (to build the userservice image)
+	  (to build the web-app image)
  - docker-compose up (to start the containers). Wait around 1 min until the containers are fully started and healthy.
 
- - to test the functionality open HTTP client (e.g. Postman)
- 	-  userservice use cases:
- 		1.  to add user send POST request to resource URL http://localhost:10556/userapi/users with body
+ - to test the back-end functionality open HTTP client (e.g. Postman) or the integrated front-end with back-end go to http://localhost:3000/join in browser
+ 
+ 
+ ______________________________________userservice use cases_____________________________
+ 		**** 1 ****
+		to add user send POST request to resource URL http://localhost:10556/userapi/users with body
 
 			(e.g. {
 		"firstName": "Alan",
@@ -37,10 +40,13 @@ To test with Docker run the following commands:
 		"verified": "Yes"
 		})
 
-    		2. to display all the users send GET request  to resource URL http://localhost:10556/userapi/users
-
-	- rideservice use cases:
-		1. to add a ride send POST request to resource URL http://localhost:10555/rideapi/rides with body
+    		**** 2 **** 
+		to display all the users send GET request  to resource URL http://localhost:10556/userapi/users
+		
+		
+_____________________________________rideservice use cases_________________________________________________________
+		**** 1 ****
+		to add a ride send POST request to resource URL http://localhost:10555/rideapi/rides with body
 
 		( e.g. {
 
@@ -55,12 +61,15 @@ To test with Docker run the following commands:
        		"stop3": ""
 		})
 
-		2. to see all rides  send GET request  to resource URL  http://localhost:10555/rideapi/rides
+		**** 2 ****
+		to see all rides  send GET request  to resource URL  http://localhost:10555/rideapi/rides
 
-		3. to delete a ride send DELETE request to resource  http://localhost:10555/rideapi/rides/<rideId>
+		**** 3 ****
+		to delete a ride send DELETE request to resource  http://localhost:10555/rideapi/rides/<rideId>
 		(replace <rideID> with an existing id: e.g.  http://localhost:10555/rideapi/rides/1)
 
-		4. to search for a ride by from/to location and date send POST request to resource URL 
+		**** 4 ****
+		to search for a ride by from/to location and date send POST request to resource URL 
 		http://localhost:10555/rideapi/ridesForRouteAndDate with body
 		e.g.
 		 {
@@ -77,7 +86,22 @@ To test with Docker run the following commands:
 			* From is the same as to location.
 			* No spaces left in the ride.
 		
-		5.  to search for a ride by from/to location send GET request to resource URL with the from/to location in the path. 							E.g. http://localhost:10555/rideapi/rides/Athlone/Kinnegad
-		NOTE: nNotes from point 4 above are valid for this use case as well.
+		**** 5 ****
+		to search for a ride by from/to location send GET request to resource URL with the from/to location in the path. 							E.g. http://localhost:10555/rideapi/rides/Athlone/Kinnegad
+		NOTE: Notes from point 4 above are valid for this use case as well.
+		
+		**** 6 ****
+		to book a ride send POST request to resource URL  http://localhost:10555/rideapi/rides/booking with body
+			{
+  			 "rideId": 1,
+   			"passengerId": 3
+			}
+		NOTE: The use case will add the booking and decrease the number of spaces left if the booking is successful,
+		only if the following conditions are true:
+		1. if spaces are still available
+		2. if a ride exists with the requested ID
+		3. if the same booking for the same passenger doesn't exist
+		
+		
 		
 		
