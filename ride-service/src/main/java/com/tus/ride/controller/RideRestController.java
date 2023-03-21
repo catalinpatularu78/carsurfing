@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tus.ride.model.Booking;
 import com.tus.ride.model.Ride;
+import com.tus.ride.repo.BookingRepository;
 import com.tus.ride.repo.RideRepository;
 import com.tus.ride.response.ErrorResponse;
 import com.tus.ride.response.Response;
@@ -37,6 +40,9 @@ public class RideRestController {
 
 	@Autowired
 	private RideRepository rideRepo;
+
+	@Autowired
+	private BookingRepository bookingRepo;
 
 	@GetMapping(value = "/rides")
 	List<Ride> get() {
@@ -108,6 +114,41 @@ public class RideRestController {
 			}
 		}
 		return rides;
+
+	}
+
+	@Transactional(propagation = Propagation.MANDATORY)
+	@PostMapping(value = "/rides/booking")
+	Response addBooking(@RequestBody Booking booking) {
+		try {
+			// check if spaces are still available
+			Optional<Ride> existingRide = rideRepo.findById(booking.getRideId());
+			if (existingRide.isPresent()) {
+				// check if booking already exists
+				Optional<Booking> existingBooking = bookingRepo.findByRideIdAndPassengerId(booking.getRideId(),
+						booking.getPassengerId());
+				if (existingBooking.isPresent()) {
+					return new ErrorResponse(ResponseCode.FAILED, "Ride cannot be booked.", "Booking already exists.");
+				}
+			} else {
+				return new ErrorResponse(ResponseCode.FAILED, "Ride cannot be booked.", "Ride doesn't exist.");
+			}
+
+			if (existingRide.get().getSpacesLeft() > 0) {
+				bookingRepo.save(booking);
+			} else {
+				return new ErrorResponse(ResponseCode.FAILED, "Ride cannot be booked.", "The spaces are full.");
+			}
+
+			// decrease the number of spaces
+			int newNumberOfSpaces = existingRide.get().getSpacesLeft() - 1;
+			// do number of spaces left -1
+			rideRepo.updateNumberOfSpacesLeft(booking.getRideId(), newNumberOfSpaces);
+			return new Response(ResponseCode.SUCCESS, "Ride was booked successfully.");
+
+		} catch (Exception exc) {
+			return new ErrorResponse(ResponseCode.FAILED, "Ride cannot be booked.", exc.getMessage());
+		}
 
 	}
 
