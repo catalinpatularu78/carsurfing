@@ -1,6 +1,7 @@
 package com.tus.ride.repo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -42,5 +43,7 @@ public interface RideRepository extends JpaRepository<Ride, Integer> {
 	@Transactional
 	@Query(value = "UPDATE ride r SET r.spaces_Left = :spacesLeft WHERE r.id =:id", nativeQuery = true)
 	void updateNumberOfSpacesLeft(int id, int spacesLeft);
+
+	Optional<Ride> findById(Long rideId);
 
 }

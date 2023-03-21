@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +48,15 @@ public class RideRestController {
 	@GetMapping(value = "/rides")
 	List<Ride> get() {
 		return rideRepo.findAll();
+	}
+
+	@GetMapping("/rides/{id}")
+	public ResponseEntity<?> getRideById(@PathVariable(value = "id") Integer rideId) {
+		Optional<Ride> ride = rideRepo.findById(rideId);
+		if (ride.isPresent())
+			return ResponseEntity.ok().body(ride.get());
+		else
+			return ResponseEntity.ok().body("Ride not found");
 	}
 
 	@PostMapping(value = "/rides")
@@ -86,7 +96,6 @@ public class RideRestController {
 			responseMessage = "Ride cannot be deleted.";
 			return new ErrorResponse(responseCode, responseMessage, exc.getCause().getCause().getMessage());
 		}
-
 	}
 
 	@RequestMapping(value = "/ridesForRouteAndDate", method = RequestMethod.POST)

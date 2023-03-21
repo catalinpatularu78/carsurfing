@@ -110,14 +110,10 @@
                     {{ ride.spacesLeft === 0 ? "Full" : ride.spacesLeft }}
                   </td>
                   <td class="px-4 py-3">
-                    <NuxtLink
-                      link="/"
-                      isactive="false"
-                      component="a"
-                      linkattr="href"
-                      class="font-medium text-teal-600 dark:text-teal-500 hover:underline"
-                      to="/rides/new"
-                      >View</NuxtLink
+                    <span
+                      class="text-teal-600 hover:text-purple-600 cursor-pointer"
+                      @click="openRideDetail(ride.id)"
+                      >View</span
                     >
                   </td>
                 </tr>
@@ -127,13 +123,34 @@
         </div>
       </div>
     </section>
+    <PopUp :is-open="popupOpen" @close="popupOpen = false">
+      <template #header>
+        <h2
+          class="text-2xl font-semibold text-teal-500 capitalize dark:text-white"
+        >
+          Journey detail: {{ selectedRide.fromLocation }} to
+          {{ selectedRide.toLocation }}
+        </h2>
+      </template>
+      <template #body
+        ><RideDetails :ride="selectedRide"></RideDetails>
+      </template>
+    </PopUp>
   </div>
 </template>
 <script>
+import PopUp from "~~/components/PopUp.vue";
+import RideDetails from "../../components/RideDetails.vue";
 export default {
+  components: {
+    PopUp,
+    RideDetails,
+  },
   setup() {
+    const popupOpen = ref(false);
     const searchQuery = ref("");
     const rides = ref([]);
+    const selectedRide = ref({});
     async function getRides() {
       await fetch("http://localhost:10555/rideapi/rides")
         .then((response) => response.json())
@@ -154,9 +171,26 @@ export default {
       });
     });
 
+    async function getRide(id) {
+      await fetch(`http://localhost:10555/rideapi/rides/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          selectedRide.value = { ...data };
+        });
+    }
+
+    function openRideDetail(id) {
+      getRide(id);
+      popupOpen.value = true;
+    }
+
     return {
+      selectedRide,
+      getRide,
       searchQuery,
       filteredRides,
+      popupOpen,
+      openRideDetail,
     };
   },
 };
