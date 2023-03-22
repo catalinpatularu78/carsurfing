@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tus.ride.model.Ride;
 
@@ -36,6 +38,11 @@ public interface RideRepository extends JpaRepository<Ride, Integer> {
 			+ " r.stop_1 = :fromLocation and r.stop_3=:toLocation or"
 			+ " r.stop_2 = :fromLocation and r.stop_3=:toLocation ", nativeQuery = true)
 	List<Ride> findByFromLocationAndToLocation(String fromLocation, String toLocation);
+
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE ride r SET r.spaces_Left = :spacesLeft WHERE r.id =:id", nativeQuery = true)
+	void updateNumberOfSpacesLeft(int id, int spacesLeft);
 
 	Optional<Ride> findById(Long rideId);
 
