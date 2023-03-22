@@ -24,3 +24,4 @@ target/
 .springBeans
 .sts4-cache
 .gitignore
+/.metadata/
