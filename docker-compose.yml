@@ -26,6 +26,17 @@ services:
             WAIT_HOSTS: mysql:3306
         depends_on: 
             - carsurfing-mysql
+    reviewservice-app:
+        container_name: reviewservice-app
+        image: reviewservice
+        restart: on-failure
+        ports:
+            - 10557:9099
+        environment:
+            WAIT_HOSTS: mysql:3306
+        depends_on: 
+            - carsurfing-mysql
+            - userservice-app
     carsurfing-mysql:
         container_name: carsurfing-mysql
         image: carsurfing-mysql
