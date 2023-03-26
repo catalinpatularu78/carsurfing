@@ -56,4 +56,3 @@ insert into user values(0,'Sorcha','Jenny','Murtagh','','jennymurtagh@yahoo.com'
 insert into user values(0,'Robert','','Smith','funny person','robertS45@yahoo.com','089977546','Yes');
 insert into user values(0,'John','Sean','Kennedy','pet owner','seankennedy777@gmail.com','087689800','Yes');
 insert into user values(0,'Mary','Diana','Fernandez','','fernandezm@gmail.com','0874343563','Yes');
-insert into user values('Mary','Diana','Fernandez','','fernandezm@gmail.com','0874343563','Yes');
