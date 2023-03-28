@@ -6,7 +6,8 @@ module.exports = {
     "./plugins/**/*.{js,ts}",
     "./nuxt.config.{js,ts}",
     'node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}',
-    'node_modules/flowbite/**/*.{js,jsx,ts,tsx}'
+    'node_modules/flowbite/**/*.{js,jsx,ts,tsx}',
+    "./node_modules/flowbite/**/*.js",
   ],
   theme: {
     colors: {
