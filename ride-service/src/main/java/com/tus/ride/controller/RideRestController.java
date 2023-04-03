@@ -8,10 +8,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.tus.ride.dto.RideInfo;
+import com.tus.ride.dto.User;
 import com.tus.ride.model.Booking;
 import com.tus.ride.model.Ride;
 import com.tus.ride.repo.BookingRepository;
@@ -44,6 +48,12 @@ public class RideRestController {
 
 	@Autowired
 	private BookingRepository bookingRepo;
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Value("${userService.url}")
+	private String userServiceURL;
 
 	@GetMapping(value = "/rides")
 	List<Ride> get() {
@@ -99,7 +109,7 @@ public class RideRestController {
 	}
 
 	@RequestMapping(value = "/ridesForRouteAndDate", method = RequestMethod.POST)
-	public List<Ride> findRidePerRouteAndDate(@RequestBody Map<String, String> rideRequest) {
+	public List<RideInfo> findRidePerRouteAndDate(@RequestBody Map<String, String> rideRequest) {
 		List<Ride> rides = new ArrayList<Ride>();
 		if (!rideRequest.get("fromLocation").equalsIgnoreCase(rideRequest.get("toLocation"))) {
 			List<Ride> existingRides = rideRepo.findRides(rideRequest.get("fromLocation"),
@@ -109,11 +119,16 @@ public class RideRestController {
 			}
 
 		}
-		return rides;
+		List<RideInfo> ridesInfo = new ArrayList<RideInfo>();
+		for (Ride ride : rides) {
+			User user = restTemplate.getForObject(userServiceURL + ride.getDriverId(), User.class);
+			ridesInfo.add(new RideInfo(ride, user));
+		}
+		return ridesInfo;
 	}
 
 	@GetMapping("rides/{fromLocation}/{toLocation}")
-	public List<Ride> findByLocation(@PathVariable("fromLocation") String fromLocation,
+	public List<RideInfo> findByLocation(@PathVariable("fromLocation") String fromLocation,
 			@PathVariable("toLocation") String toLocation) {
 		List<Ride> rides = new ArrayList<Ride>();
 		if (!fromLocation.equalsIgnoreCase(toLocation)) {
@@ -122,8 +137,12 @@ public class RideRestController {
 				rides = getRidesWithSpaces(existingRides);
 			}
 		}
-		return rides;
-
+		List<RideInfo> ridesInfo = new ArrayList<RideInfo>();
+		for (Ride ride : rides) {
+			User user = restTemplate.getForObject(userServiceURL + ride.getDriverId(), User.class);
+			ridesInfo.add(new RideInfo(ride, user));
+		}
+		return ridesInfo;
 	}
 
 	@Transactional(propagation = Propagation.MANDATORY)
