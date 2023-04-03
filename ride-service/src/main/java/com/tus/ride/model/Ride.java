@@ -28,7 +28,7 @@ public class Ride {
 	public void setId(Integer id) {
 		this.id = id;
 	}
- 
+
 	public Integer getDriverId() {
 		return driverId;
 	}

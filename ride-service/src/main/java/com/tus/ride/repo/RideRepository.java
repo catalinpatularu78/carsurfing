@@ -46,4 +46,11 @@ public interface RideRepository extends JpaRepository<Ride, Integer> {
 
 	Optional<Ride> findById(Long rideId);
 
+	List<Ride> findByDateOfDeparture(String dateOfDeparture);
+
+	@Transactional
+	@Modifying
+	@Query(value = "delete from ride r where STR_TO_DATE(r.date_of_departure, '%Y-%m-%d') < STR_TO_DATE('2022-10-24',  '%Y-%m-%d')", nativeQuery = true)
+	void deleteRidesWithOldDateOfDeparture(String date);
+
 }
