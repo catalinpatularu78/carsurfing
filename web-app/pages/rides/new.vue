@@ -194,7 +194,7 @@ export default {
     }));
 
     async function submitCreateRide() {
-      await fetch("http://localhost:10555/rideapi/rides", {
+      await fetch("http://localhost:9091/rideapi/rides", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

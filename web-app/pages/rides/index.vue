@@ -152,7 +152,7 @@ export default {
     const rides = ref([]);
     const selectedRide = ref({});
     async function getRides() {
-      await fetch("http://localhost:10555/rideapi/rides")
+      await fetch("http://localhost:9091/rideapi/rides")
         .then((response) => response.json())
         .then((data) => {
           rides.value = data;
@@ -172,7 +172,7 @@ export default {
     });
 
     async function getRide(id) {
-      await fetch(`http://localhost:10555/rideapi/rides/${id}`)
+      await fetch(`http://localhost:9091/rideapi/rides/${id}`)
         .then((response) => response.json())
         .then((data) => {
           selectedRide.value = { ...data };
