@@ -68,7 +68,7 @@
               >Create Ride</NuxtLink
             >
           </li>
-          <li>
+          <li v-if="!isLoggedIn">
             <NuxtLink
               link="/"
               isactive="false"
@@ -79,8 +79,43 @@
               >Join</NuxtLink
             >
           </li>
+          <li v-if="!isLoggedIn">
+            <NuxtLink
+              link="/"
+              isactive="false"
+              component="a"
+              linkattr="href"
+              class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-teal-500 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              to="/login"
+              >Login</NuxtLink
+            >
+          </li>
+          <li v-if="isLoggedIn">
+            <NuxtLink
+              link="/"
+              isactive="false"
+              component="a"
+              linkattr="href"
+              class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-teal-500 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              to="/account"
+              >My Account</NuxtLink
+            >
+          </li>
         </ul>
       </div>
     </div>
   </nav>
 </template>
+<script>
+import { useMainStore } from "~~/MainStore";
+import { computed } from "vue";
+export default {
+  setup() {
+    const store = useMainStore();
+
+    return {
+      isLoggedIn: computed(() => store.isLoggedIn),
+    };
+  },
+};
+</script>
