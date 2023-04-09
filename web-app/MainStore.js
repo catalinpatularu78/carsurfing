@@ -5,5 +5,15 @@ export const useMainStore = defineStore('main', {
     isLoggedIn: false,
     bookingsRequested: [],
   }),
-  persist: true,
+  actions: {
+    setIsLoggedIn() {
+      this.isLoggedIn = true;
+    },
+    setIsLoggedOut() {
+      this.isLoggedIn = false;
+    },
+  },
+  persist: {
+    paths: ['isLoggedIn', 'bookingsRequested'],
+  },
 })

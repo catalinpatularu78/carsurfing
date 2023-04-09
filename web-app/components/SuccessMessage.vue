@@ -17,8 +17,8 @@
           </svg>
         </div>
         <div>
-          <p class="font-bold">New journey created</p>
-          <p class="text-sm">We'll let you know when new carpoolers join!</p>
+          <p class="font-bold">{{ title }}</p>
+          <p v-if="message" class="text-sm">{{ message }}</p>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@ export default {
     },
     message: {
       type: String,
-      default: "null",
+      default: "",
     },
   },
 };

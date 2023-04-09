@@ -101,6 +101,17 @@
               >My Account</NuxtLink
             >
           </li>
+          <li v-if="isLoggedIn">
+            <NuxtLink
+              link="/"
+              isactive="false"
+              component="a"
+              linkattr="href"
+              class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-teal-500 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              @click="logOut"
+              >Logout</NuxtLink
+            >
+          </li>
         </ul>
       </div>
     </div>
@@ -115,6 +126,7 @@ export default {
 
     return {
       isLoggedIn: computed(() => store.isLoggedIn),
+      logOut: store.setIsLoggedOut,
     };
   },
 };
