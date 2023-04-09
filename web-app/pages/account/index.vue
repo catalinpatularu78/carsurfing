@@ -7,9 +7,9 @@
         >
           My Profile
         </h1>
-
+        <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-8" />
         <div class="flex">
-          <img src="https://placebear.com/200/200" class="mr-12" />
+          <FancyImage></FancyImage>
           <div>
             <div class="flex mb-3">
               <p class="text-gray-500 dark:text-gray-300 mr-4">Name:</p>
@@ -49,10 +49,26 @@
         </div>
         <div>
           <h2
-            class="text-1xl font-semibold text-teal-500 lg:text-2xl dark:text-white text- py-5"
+            class="text-1xl font-semibold text-teal-500 lg:text-2xl dark:text-white pt-10 pb-5"
+          >
+            Trips
+          </h2>
+          <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-5" />
+          <div
+            v-for="(ride, index) in ridesForThisUser"
+            :key="ride.id"
+            class="mb-6"
+          >
+            <JourneyDetail :index="index" :ride="ride"></JourneyDetail>
+          </div>
+        </div>
+        <div>
+          <h2
+            class="text-1xl font-semibold text-teal-500 lg:text-2xl dark:text-white pt-10 pb-5"
           >
             Reviews
           </h2>
+          <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-5" />
           <ReviewTable :reviews="fakeReviews"></ReviewTable>
         </div>
       </div>
@@ -61,14 +77,18 @@
 </template>
 <script>
 import ReviewTable from "~~/components/ReviewTable.vue";
+import FancyImage from "~~/components/FancyImage.vue";
+import JourneyDetail from "~~/components/JourneyDetail.vue";
 import { ref } from "vue";
 export default {
   components: {
     ReviewTable,
+    FancyImage,
+    JourneyDetail,
   },
   setup() {
     const userDetails = ref({});
-
+    const rides = ref([]);
     const fakeReviews = ref([
       {
         reviewerName: "Mary",
@@ -77,9 +97,25 @@ export default {
       },
     ]);
 
+    const ridesForThisUser = computed(() => {
+      return rides.value.filter(
+        (ride) => ride.driverId === userDetails.value.id
+      );
+    });
+
+    getRides();
+
+    async function getRides() {
+      await fetch("http://localhost:9091/rideapi/rides")
+        .then((response) => response.json())
+        .then((data) => {
+          rides.value = data;
+        });
+    }
+
     getUserDetails();
     async function getUserDetails() {
-      await fetch("http://localhost:9092/userapi/users/2")
+      await fetch("http://localhost:9092/userapi/users/1")
         .then((response) => response.json())
         .then((data) => {
           userDetails.value = data;
@@ -89,64 +125,8 @@ export default {
     return {
       userDetails,
       fakeReviews,
+      ridesForThisUser,
     };
   },
 };
 </script>
-<style scoped>
-@property --gap {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0;
-}
-@property --angle {
-  syntax: "<angle>";
-  inherits: true;
-  initial-value: 0deg;
-}
-
-img {
-  --border: 15px;
-  --gap: 12px;
-  --color: rgb(6 148 162);
-
-  width: 200px;
-  aspect-ratio: 1;
-  box-sizing: border-box;
-  border-radius: 50%;
-  margin: 0 32px 0 0;
-  padding: calc(var(--border) + var(--gap));
-
-  --angle: 90deg;
-  background: radial-gradient(farthest-side, var(--color) 97%, #0000 101%)
-      85.35% 85.35%,
-    conic-gradient(
-      from calc(180deg - var(--angle) / 2),
-      #0000 var(--angle),
-      var(--color) 0
-    ),
-    radial-gradient(farthest-side, var(--color) 97%, #0000 101%) 14.65% 85.35%;
-  background-size: var(--border) var(--border), auto;
-  background-repeat: no-repeat;
-
-  -webkit-mask: radial-gradient(
-    farthest-side,
-    #000 calc(99% - calc(var(--border) + var(--gap))),
-    #0000 calc(100% - calc(var(--border) + var(--gap)))
-      calc(99% - var(--border)),
-    #000 calc(100% - var(--border))
-  );
-  mask: radial-gradient(
-    farthest-side,
-    #000 calc(99% - calc(var(--border) + var(--gap))),
-    #0000 calc(100% - calc(var(--border) + var(--gap)))
-      calc(99% - var(--border)),
-    #000 calc(100% - var(--border))
-  );
-  transition: --angle 0.4s, --gap 0.4s;
-}
-img:hover {
-  --angle: 0deg;
-  --gap: 5px;
-}
-</style>
