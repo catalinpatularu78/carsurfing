@@ -8,11 +8,11 @@
           My Profile
         </h1>
         <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-8" />
-        <div class="flex">
+        <div class="flex mb-4">
           <FancyImage></FancyImage>
           <div>
             <div class="flex mb-3">
-              <p class="text-gray-500 dark:text-gray-300 mr-4">Name:</p>
+              <p class="text-teal-500 dark:text-gray-300 mr-16">Name:</p>
               <p class="text-gray-500 dark:text-gray-300">
                 {{ userDetails.firstName }}
                 <span v-if="userDetails.middleName">{{
@@ -22,25 +22,25 @@
               </p>
             </div>
             <div class="flex mb-3">
-              <p class="text-gray-500 dark:text-gray-300 mr-4">Email:</p>
+              <p class="text-teal-500 dark:text-gray-300 mr-16">Email:</p>
               <p class="text-gray-500 dark:text-gray-300">
                 {{ userDetails.email }}
               </p>
             </div>
             <div class="flex mb-3">
-              <p class="text-gray-500 dark:text-gray-300 mr-4">Description:</p>
+              <p class="text-teal-500 dark:text-gray-300 mr-16">Description:</p>
               <p class="text-gray-500 dark:text-gray-300">
                 {{ userDetails.description }}
               </p>
             </div>
             <div class="flex mb-3">
-              <p class="text-gray-500 dark:text-gray-300 mr-4">Phone:</p>
+              <p class="text-teal-500 dark:text-gray-300 mr-16">Phone:</p>
               <p class="text-gray-500 dark:text-gray-300">
                 {{ userDetails.phone }}
               </p>
             </div>
             <div class="flex mb-3">
-              <p class="text-gray-500 dark:text-gray-300 mr-4">Verified:</p>
+              <p class="text-teal-500 dark:text-gray-300 mr-16">Verified:</p>
               <p class="text-gray-500 dark:text-gray-300">
                 {{ userDetails.verified }}
               </p>
@@ -57,7 +57,8 @@
           <div
             v-for="(ride, index) in ridesForThisUser"
             :key="ride.id"
-            class="mb-6"
+            class="mb-6 p-4 border-b-2 border-teal-500"
+            :class="{ 'bg-teal-50': !journeyIsInThePast(ride) }"
           >
             <JourneyDetail :index="index" :ride="ride"></JourneyDetail>
           </div>
@@ -122,10 +123,19 @@ export default {
         });
     }
 
+    function journeyIsInThePast(ride) {
+      const journeyDateTime = new Date(
+        `${ride.dateOfDeparture} ${ride.estimatedDepartureTime}`
+      );
+      const now = new Date();
+      return journeyDateTime < now;
+    }
+
     return {
       userDetails,
       fakeReviews,
       ridesForThisUser,
+      journeyIsInThePast,
     };
   },
 };

@@ -8,8 +8,9 @@
       >
         <Icon name="material-symbols:alarm" class="text-xl"></Icon>
       </span>
-      <h3 class="font-medium leading-tight">
-        Departure Time: {{ rideDetails.estimatedDepartureTime }}
+      <h3 class="font-medium leading-tight ml-1">
+        {{ journeyCompleted ? "Departed at: " : "Depature Time: " }}
+        {{ rideDetails.estimatedDepartureTime }}
       </h3>
     </li>
     <li class="mb-10 ml-6 flex items-center" v-if="rideDetails.stop1">
@@ -18,8 +19,9 @@
       >
         <Icon name="bi:sign-stop" class="text-2xl"></Icon>
       </span>
-      <h3 class="font-medium leading-tight">
-        Stops: {{ rideDetails.stop1 }}
+      <h3 class="font-medium leading-tight ml-1">
+        {{ journeyCompleted ? "Stopped at: " : "Stops: " }}
+        {{ rideDetails.stop1 }}
         <span v-if="rideDetails.stop2">{{ ", " + rideDetails.stop2 }}</span>
         <span v-if="rideDetails.stop3">{{ ", " + rideDetails.stop3 }}</span>
       </h3>
@@ -30,11 +32,11 @@
       >
         <Icon name="fluent:people-audience-20-regular" class="text-2xl"></Icon>
       </span>
-      <h3 class="font-medium leading-tight">
+      <h3 class="font-medium leading-tight ml-1">
         {{
           rideDetails.spacesLeft > 0
             ? " Spaces Left: " + rideDetails.spacesLeft
-            : "Carpool is full"
+            : "Full Carpool - Nice Job!"
         }}
       </h3>
     </li>
@@ -46,6 +48,10 @@ export default {
     rideDetails: {
       type: Object,
       default: () => ({}),
+    },
+    journeyCompleted: {
+      type: Boolean,
+      default: false,
     },
   },
 };
