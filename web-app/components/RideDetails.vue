@@ -20,10 +20,15 @@
         <template v-if="ride.stop3">{{ "- " + ride.stop3 }}</template>
       </p>
     </div>
+    <div class="flex mb-3">
+      <p class="text-gray-500 dark:text-gray-300 mr-4">Driver:</p>
+      <p class="text-gray-500 dark:text-gray-300">
+        {{ ride.driverId + "  << Need to link to driver info here" }}
+      </p>
+    </div>
   </div>
 </template>
 <script>
-import { ref } from "vue";
 export default {
   props: {
     ride: {

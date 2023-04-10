@@ -24,8 +24,8 @@ To test with Docker run the following commands:
  - docker-compose up (to start the containers). Wait around 1 min until the containers are fully started and healthy.
 
  - to test the back-end functionality open HTTP client (e.g. Postman) or the integrated front-end with back-end go to http://localhost:3000/join in browser
- 
- 
+
+
  ______________________________________userservice use cases_____________________________
  		**** 1 ****
 		to add user send POST request to resource URL http://localhost:9092/userapi/users with body
@@ -40,10 +40,11 @@ To test with Docker run the following commands:
 		"verified": "Yes"
 		})
 
-    		**** 2 **** 
+   **** 2 ****
 		to display all the users send GET request  to resource URL http://localhost:9092/userapi/users
-		
-		
+
+
+
 _____________________________________rideservice use cases_________________________________________________________
 		**** 1 ****
 		to add a ride send POST request to resource URL http://localhost:9091/rideapi/rides with body
@@ -85,11 +86,11 @@ _____________________________________rideservice use cases______________________
 			* ride doesn't exist.
 			* From is the same as to location.
 			* No spaces left in the ride.
-		
+
 		**** 5 ****
 		to search for a ride by from/to location send GET request to resource URL with the from/to location in the path. 							E.g. http://localhost:9091/rideapi/rides/Athlone/Kinnegad
 		NOTE: Notes from point 4 above are valid for this use case as well.
-		
+
 		**** 6 ****
 		to book a ride send POST request to resource URL  http://localhost:9091/rideapi/rides/booking with body
 			{
@@ -101,7 +102,7 @@ _____________________________________rideservice use cases______________________
 		1. if spaces are still available
 		2. if a ride exists with the requested ID
 		3. if the same booking for the same passenger doesn't exist
-		
-		
-		
-		
+
+
+
+

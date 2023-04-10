@@ -132,8 +132,32 @@
           {{ selectedRide.toLocation }}
         </h2>
       </template>
-      <template #body
-        ><RideDetails :ride="selectedRide"></RideDetails>
+      <template #body>
+        <RideDetails :ride="selectedRide"></RideDetails>
+      </template>
+      <template #footer>
+        <div class="flex justify-end">
+          <p
+            v-if="!selectedRide.spacesLeft"
+            class="text-gray-500 bg-gray-50 p-3 px-7 rounded-lg"
+          >
+            No spaces left
+          </p>
+          <p
+            v-else-if="bookingMadePreviously"
+            class="text-purple-500 bg-purple-50 p-3 px-5 rounded-lg"
+          >
+            Request sent!
+          </p>
+          <button
+            v-else
+            @click="requestBooking"
+            type="button"
+            class="text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+          >
+            Send a request to join
+          </button>
+        </div>
       </template>
     </PopUp>
   </div>
@@ -141,18 +165,28 @@
 <script>
 import PopUp from "~~/components/PopUp.vue";
 import RideDetails from "../../components/RideDetails.vue";
+import { useMainStore } from "~~/MainStore";
 export default {
   components: {
     PopUp,
     RideDetails,
   },
   setup() {
+    const store = useMainStore();
     const popupOpen = ref(false);
     const searchQuery = ref("");
     const rides = ref([]);
     const selectedRide = ref({});
+    const bookingMadePreviously = computed(() => {
+      console.log(store.bookingsRequested.includes(selectedRide.value.id));
+      return (
+        store.bookingsRequested.length > 0 &&
+        store.bookingsRequested.includes(selectedRide.value.id)
+      );
+    });
+
     async function getRides() {
-      await fetch("http://localhost:10555/rideapi/rides")
+      await fetch("http://localhost:9091/rideapi/rides")
         .then((response) => response.json())
         .then((data) => {
           rides.value = data;
@@ -172,7 +206,7 @@ export default {
     });
 
     async function getRide(id) {
-      await fetch(`http://localhost:10555/rideapi/rides/${id}`)
+      await fetch(`http://localhost:9091/rideapi/rides/${id}`)
         .then((response) => response.json())
         .then((data) => {
           selectedRide.value = { ...data };
@@ -184,6 +218,29 @@ export default {
       popupOpen.value = true;
     }
 
+    async function requestBooking() {
+      const bookingData = {
+        rideId: selectedRide.value.id,
+        passengerId: 1, // TO-DO: Replace with dynamic value once login available
+      };
+
+      await fetch("http://localhost:9091/rideapi/rides/booking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookingData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.responseCode === "SUCCESS") {
+            store.bookingsRequested.push(selectedRide.value.id);
+          } else {
+            console.log("booking failed");
+          }
+        });
+    }
+
     return {
       selectedRide,
       getRide,
@@ -191,6 +248,9 @@ export default {
       filteredRides,
       popupOpen,
       openRideDetail,
+      requestBooking,
+      bookingMadePreviously,
+      bookingsRequested: computed(() => store.bookingsRequested),
     };
   },
 };
