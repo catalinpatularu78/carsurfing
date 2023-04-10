@@ -30,10 +30,15 @@
           class="pb-6 text-teal-500 hover:underline cursor-pointer hover:text-teal-800"
           >Cancel booking</a
         >
-        <a
+        <NuxtLink
           v-else
+          link="/"
+          isactive="false"
+          component="a"
+          linkattr="href"
+          :to="`/reviews/new?reviewer=${1}`"
           class="pb-6 text-teal-500 hover:underline cursor-pointer hover:text-teal-800"
-          >Rate this journey</a
+          >Rate this journey</NuxtLink
         >
       </div>
     </div>
