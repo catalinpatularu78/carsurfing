@@ -40,8 +40,9 @@ To test with Docker run the following commands:
 		"verified": "Yes"
 		})
 
-    		**** 2 ****
+   **** 2 ****
 		to display all the users send GET request  to resource URL http://localhost:9092/userapi/users
+
 
 
 _____________________________________rideservice use cases_________________________________________________________
@@ -69,7 +70,7 @@ _____________________________________rideservice use cases______________________
 		(replace <rideID> with an existing id: e.g.  http://localhost:9091/rideapi/rides/1)
 
 		**** 4 ****
-		to search for a ride by from/to location and date send POST request to resource URL
+		to search for a ride by from/to location and date send POST request to resource URL 
 		http://localhost:9091/rideapi/ridesForRouteAndDate with body
 		e.g.
 		 {
