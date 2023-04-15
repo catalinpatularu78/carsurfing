@@ -10,6 +10,6 @@ import com.tus.ride.model.Booking;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 	Optional<Booking> findByRideIdAndPassengerId(int rideId, int passengerId);
 
-	List<Booking> findBookingsByPassengerId(int passengerId);
+	List<Booking> findByPassengerId(int passengerId);
 
 }
