@@ -25,7 +25,7 @@
       ></JourneyDetailStepper>
       <div class="flex flex-col justify-between">
         <h4 class="text-lg text-right">
-          {{ isDriver ? "Driving" : "Travelling as Passenger" }}
+          {{ isDriver ? "Carpool Driver" : "Carpool Passenger" }}
         </h4>
         <NuxtLink
           v-if="journeyIsInThePast && !isDriver"
@@ -33,8 +33,8 @@
           isactive="false"
           component="a"
           linkattr="href"
-          :to="`/reviews/new?reviewer=${userId}`"
-          class="pb-6 text-teal-500 hover:underline cursor-pointer hover:text-teal-800"
+          :to="`/reviews/new?reviewed=${ride.driverId}&reviewer=${username}`"
+          class="pb-6 text-teal-500 text-right hover:underline cursor-pointer hover:text-teal-800"
           >Rate this journey</NuxtLink
         >
       </div>
@@ -57,9 +57,13 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    userId: {
+    driverId: {
       type: Number,
       default: 0,
+    },
+    username: {
+      type: String,
+      default: "",
     },
   },
   setup(props) {

@@ -27,8 +27,10 @@
         </div>
 
         <div class="flex mb-5">
-          <p class="text-sm text-gray-900 font-medium mr-4">Driver:</p>
-          <p class="text-sm text-gray-900 font-medium">Add Driver name</p>
+          <p class="text-sm text-gray-900 font-medium mr-4">Reviewer Name:</p>
+          <p class="text-sm text-gray-900 font-medium">
+            {{ route.query.reviewer }}
+          </p>
         </div>
         <div class="mb-6 max-w-full">
           <label
@@ -108,29 +110,30 @@ export default {
       comment: comment.value,
       rating: rating.value,
       reviewerName: route.query.reviewer,
-      reviewedId: 1,
+      reviewedId: route.query.reviewed,
     }));
 
     function setRating(item) {
       rating.value = item;
     }
 
+    const loginToken = useCookie("loginToken");
+
     async function submitCreateReview() {
       await fetch("http://localhost:9099/reviewapi/reviews", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${loginToken.value}`,
         },
         body: JSON.stringify(data.value),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.id) {
-            reviewCreated.value = true;
-          } else {
-            showError.value = true;
-          }
-        });
+      }).then((response) => {
+        if (response) {
+          reviewCreated.value = true;
+        } else {
+          showError.value = true;
+        }
+      });
     }
 
     return {

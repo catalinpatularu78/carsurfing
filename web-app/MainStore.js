@@ -22,6 +22,7 @@ export const useMainStore = defineStore('main', {
       this.isLoggedIn = false;
       const loginToken = useCookie("loginToken");
       loginToken.value = '';
+      navigateTo('/');
     },
   },
   persist: {

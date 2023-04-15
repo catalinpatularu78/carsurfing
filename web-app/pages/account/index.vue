@@ -5,7 +5,7 @@
         <h1
           class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-left py-5"
         >
-          My Profile
+          My Account
         </h1>
         <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-8" />
         <div class="flex mb-4">
@@ -59,7 +59,7 @@
             <JourneyDetail
               :index="index"
               :ride="ride"
-              :user-id="userId"
+              :username="userDetails.username"
             ></JourneyDetail>
           </div>
         </div>
@@ -70,7 +70,7 @@
             Reviews
           </h2>
           <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-5" />
-          <ReviewTable :reviews="fakeReviews"></ReviewTable>
+          <ReviewTable :reviews="reviews"></ReviewTable>
         </div>
       </div>
     </section>
@@ -95,13 +95,7 @@ export default {
     const ridesAsPassenger = ref([]);
     const bookings = ref([]);
     const loginToken = useCookie("loginToken");
-    const fakeReviews = ref([
-      {
-        reviewerName: "Mary",
-        comment: "Really funny person",
-        rating: 5,
-      },
-    ]);
+    const reviews = ref([]);
 
     const ridesAsDriver = computed(() => {
       return rides.value.filter((ride) => ride.driverId === userId.value);
@@ -125,6 +119,19 @@ export default {
         });
     }
 
+    async function getReviews() {
+      await fetch(`http://localhost:9099/reviewapi/reviews/${userId.value}`, {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          reviews.value = data;
+        });
+    }
+
+    getReviews();
     getBookings();
 
     async function getBookings() {
@@ -181,7 +188,7 @@ export default {
 
     return {
       userDetails,
-      fakeReviews,
+      reviews,
       allRides,
       journeyIsInThePast,
       userId,
