@@ -91,6 +91,8 @@ export default {
           if (data.tokenType === "Bearer") {
             loginToken.value = data.accessToken;
             loginSent.value = true;
+            useMainStore().setUser(data);
+            console.log();
             navigateTo("/account");
           } else {
             showError.value = true;
