@@ -15,43 +15,15 @@
           <label
             for="first-name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >First Name</label
+            >Username</label
           >
           <input
             type="text"
-            v-model="firstName"
+            v-model="username"
             id="first-name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-            placeholder="Joseph"
+            placeholder="321Username"
             required
-          />
-        </div>
-        <div class="mb-6 max-w-full">
-          <label
-            for="middle-name"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Middle Name</label
-          >
-          <input
-            type="text"
-            v-model="middleName"
-            id="middle-name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-            placeholder="Joseph"
-          />
-        </div>
-        <div class="mb-6 max-w-full">
-          <label
-            for="last-name"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Last Name</label
-          >
-          <input
-            type="text"
-            id="last-name"
-            v-model="lastName"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-            placeholder="Bloggs"
           />
         </div>
         <div class="mb-6 max-w-full">
@@ -84,22 +56,6 @@
             required
           />
         </div>
-        <div class="mb-6 max-w-full">
-          <label
-            for="description"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Description</label
-          >
-          <textarea
-            rows="4"
-            cols="50"
-            v-model="description"
-            id="description"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-            placeholder="Add description here..."
-            required
-          />
-        </div>
         <div class="mb-6">
           <label
             for="password"
@@ -114,6 +70,22 @@
             required
           />
         </div>
+        <div class="mb-6 max-w-full">
+          <label
+            for="description"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Description</label
+          >
+          <textarea
+            rows="4"
+            cols="50"
+            v-model="description"
+            id="description"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+            placeholder="Add description here..."
+          />
+        </div>
+
         <div
           v-if="showError"
           class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6"
@@ -179,27 +151,22 @@ export default {
   setup() {
     const userCreated = ref(false);
     const showError = ref(false);
-    const firstName = ref("");
-    const middleName = ref("");
-    const lastName = ref("");
+    const username = ref("");
     const phone = ref("");
     const email = ref("");
     const description = ref("");
     const password = ref("");
 
     const data = computed(() => ({
-      firstName: firstName.value,
-      middleName: middleName.value,
-      lastName: lastName.value,
+      username: username.value,
       phone: phone.value,
       email: email.value,
       description: description.value,
       password: password.value,
-      verified: false,
     }));
 
     async function submitSignup() {
-      await fetch("http://localhost:9092/userapi/users", {
+      await fetch("http://localhost:9092/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -208,7 +175,7 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          if (data.responseCode === "SUCCESS") {
+          if (data.message === "User registered successfully!") {
             userCreated.value = true;
           } else {
             showError.value = true;
@@ -218,9 +185,7 @@ export default {
 
     return {
       submitSignup,
-      firstName,
-      middleName,
-      lastName,
+      username,
       phone,
       email,
       description,

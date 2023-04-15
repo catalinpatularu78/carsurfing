@@ -1,11 +1,5 @@
 version: '3'
 services:
-    web-app:
-        container_name: web-app
-        image: web-app
-        restart: on-failure
-        ports:
-            - 3000:3000
     rideservice-app:
         container_name: rideservice-app
         image: rideservice
@@ -14,7 +8,7 @@ services:
             - 9091:9091
         environment:
             WAIT_HOSTS: mysql:3306
-        depends_on: 
+        depends_on:
             - carsurfing-mysql
             - userservice-app
     userservice-app:
@@ -25,7 +19,7 @@ services:
             - 9092:9092
         environment:
             WAIT_HOSTS: mysql:3306
-        depends_on: 
+        depends_on:
             - carsurfing-mysql
     reviewservice-app:
         container_name: reviewservice-app
@@ -35,7 +29,7 @@ services:
             - 9099:9099
         environment:
             WAIT_HOSTS: mysql:3306
-        depends_on: 
+        depends_on:
             - carsurfing-mysql
             - userservice-app
     carsurfing-mysql:
