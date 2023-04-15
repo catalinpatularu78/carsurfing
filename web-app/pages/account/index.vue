@@ -12,13 +12,9 @@
           <FancyImage></FancyImage>
           <div>
             <div class="flex mb-3">
-              <p class="text-teal-500 dark:text-gray-300 mr-16">Name:</p>
+              <p class="text-teal-500 dark:text-gray-300 mr-16">Username:</p>
               <p class="text-gray-500 dark:text-gray-300">
-                {{ userDetails.firstName }}
-                <span v-if="userDetails.middleName">{{
-                  " " + userDetails.middleName
-                }}</span>
-                {{ " " + userDetails.lastName }}
+                {{ userDetails.username }}
               </p>
             </div>
             <div class="flex mb-3">
@@ -40,9 +36,9 @@
               </p>
             </div>
             <div class="flex mb-3">
-              <p class="text-teal-500 dark:text-gray-300 mr-16">Verified:</p>
+              <p class="text-teal-500 dark:text-gray-300 mr-16">Rating:</p>
               <p class="text-gray-500 dark:text-gray-300">
-                {{ userDetails.verified }}
+                {{ userDetails.rating ? userDetails.rating : "No ratings yet" }}
               </p>
             </div>
           </div>
@@ -60,7 +56,11 @@
             class="mb-6 p-4 border-b-2 border-teal-500"
             :class="{ 'bg-teal-50': !journeyIsInThePast(ride) }"
           >
-            <JourneyDetail :index="index" :ride="ride"></JourneyDetail>
+            <JourneyDetail
+              :index="index"
+              :ride="ride"
+              :user-id="userId"
+            ></JourneyDetail>
           </div>
         </div>
         <div>
@@ -80,6 +80,7 @@
 import ReviewTable from "~~/components/ReviewTable.vue";
 import FancyImage from "~~/components/FancyImage.vue";
 import JourneyDetail from "~~/components/JourneyDetail.vue";
+import { useMainStore } from "~~/MainStore";
 import { ref } from "vue";
 export default {
   components: {
@@ -88,8 +89,10 @@ export default {
     JourneyDetail,
   },
   setup() {
+    const userId = computed(() => useMainStore().userId);
     const userDetails = ref({});
     const rides = ref([]);
+    const loginToken = useCookie("loginToken");
     const fakeReviews = ref([
       {
         reviewerName: "Mary",
@@ -99,15 +102,17 @@ export default {
     ]);
 
     const ridesForThisUser = computed(() => {
-      return rides.value.filter(
-        (ride) => ride.driverId === userDetails.value.id
-      );
+      return rides.value.filter((ride) => ride.driverId === userId.value);
     });
 
     getRides();
 
     async function getRides() {
-      await fetch("http://localhost:9091/rideapi/rides")
+      await fetch("http://localhost:9091/rideapi/rides", {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           rides.value = data;
@@ -116,7 +121,11 @@ export default {
 
     getUserDetails();
     async function getUserDetails() {
-      await fetch("http://localhost:9092/userapi/users/1")
+      await fetch(`http://localhost:9092/api/user/${userId.value}`, {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           userDetails.value = data;
@@ -136,6 +145,7 @@ export default {
       fakeReviews,
       ridesForThisUser,
       journeyIsInThePast,
+      userId,
     };
   },
 };

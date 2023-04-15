@@ -40,7 +40,23 @@
             required
           />
         </div>
-
+        <div class="mb-6 max-w-full">
+          <label
+            for="spaces-left"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Spaces Available</label
+          >
+          <input
+            v-model="spacesLeft"
+            type="number"
+            id="spaces-left"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+            min="1"
+            max="10"
+            placeholder="3"
+            required
+          />
+        </div>
         <div class="mb-6 max-w-full">
           <label
             for="stop-1"
@@ -130,6 +146,7 @@
 import { ref, computed } from "vue";
 import ErrorMessage from "~~/components/ErrorMessage.vue";
 import SuccessMessage from "~~/components/SuccessMessage.vue";
+import { useMainStore } from "~~/MainStore";
 export default {
   components: {
     ErrorMessage,
@@ -156,15 +173,17 @@ export default {
       stop2: stop2.value,
       stop3: stop3.value,
       spacesLeft: spacesLeft.value,
-      // Hardcoding this for now
-      driverId: 1,
+      driverId: useMainStore().userId,
     }));
+
+    const loginToken = useCookie("loginToken");
 
     async function submitCreateRide() {
       await fetch("http://localhost:9091/rideapi/rides", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${loginToken.value}`,
         },
         body: JSON.stringify(data.value),
       })

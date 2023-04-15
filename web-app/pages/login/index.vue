@@ -13,16 +13,16 @@
         </h1>
         <div class="mb-6 max-w-full">
           <label
-            for="email"
+            for="first-name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Email</label
+            >Username</label
           >
           <input
-            type="email"
-            id="email"
-            v-model="email"
+            type="text"
+            v-model="username"
+            id="first-name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-            placeholder="name@carsurfing.com"
+            placeholder="321Username"
             required
           />
         </div>
@@ -67,43 +67,46 @@ export default {
     SuccessMessage,
   },
   setup() {
-    const email = ref("");
+    const username = ref("");
     const password = ref("");
     const showError = ref(false);
     const loginSent = ref(false);
+    const loginToken = useCookie("loginToken");
 
     const data = computed(() => ({
-      email: email.value,
+      username: username.value,
       password: password.value,
     }));
 
     async function submitLogin() {
-      // await fetch("http://localhost:909X/loginapi/login", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(data.value),
-      // })
-      //   .then((response) => response.json())
-      //   .then((data) => {
-      //     if (data.responseCode === "SUCCESS") {
-      //       useMainStore().setIsLoggedIn();
-      //       loginSent.value = true;
-      //     } else {
-      //       showError.value = true;
-      //     }
-      //   });
+      await fetch("http://localhost:9092/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data.value),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.tokenType === "Bearer") {
+            loginToken.value = data.accessToken;
+            loginSent.value = true;
+            useMainStore().setUser(data);
+            console.log();
+            navigateTo("/account");
+          } else {
+            showError.value = true;
+          }
+        });
       useMainStore().setIsLoggedIn();
       loginSent.value = true;
     }
 
     return {
-      email,
+      username,
       password,
       loginSent,
       submitLogin,
-      password,
       showError,
     };
   },
