@@ -62,8 +62,24 @@ public class RideRestController {
 	private String userServiceURL;
 
 	@GetMapping(value = "/rides")
-	List<Ride> get() {
-		return rideRepo.findAll();
+	ResponseEntity<?> get( @RequestHeader("Authorization") String header) {
+
+		HttpHeaders headers = new HttpHeaders();
+		
+		 headers.set("Authorization",header);
+		 HttpEntity<String> entity = new HttpEntity<>("paramters",headers);
+
+		 RestTemplate restTemplate = new RestTemplate();
+		 ResponseEntity<Boolean> responseObj = restTemplate.exchange(userServiceURL + "generalauth", HttpMethod.GET, entity, Boolean.class);
+		 Boolean pass = responseObj.getBody();
+		 if (pass) {
+			 return ResponseEntity.ok().body(rideRepo.findAll());}
+		 else {
+			 return ResponseEntity
+			          .badRequest()
+			          .body(new String("Error: User not logged in!"));
+		 }
+		 
 	}
 
 	@GetMapping("/rides/{id}")
