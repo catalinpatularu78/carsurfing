@@ -178,15 +178,20 @@ export default {
     const rides = ref([]);
     const selectedRide = ref({});
     const bookingMadePreviously = computed(() => {
-      console.log(store.bookingsRequested.includes(selectedRide.value.id));
       return (
         store.bookingsRequested.length > 0 &&
         store.bookingsRequested.includes(selectedRide.value.id)
       );
     });
 
+    const loginToken = useCookie("loginToken");
+
     async function getRides() {
-      await fetch("http://localhost:9091/rideapi/rides")
+      await fetch("http://localhost:9091/rideapi/rides", {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           rides.value = data;
@@ -196,8 +201,9 @@ export default {
     getRides();
 
     const filteredRides = computed(() => {
-      if (searchQuery.value.length < 3) return rides.value;
-      return rides.value.filter((ride) => {
+      const ridesWithSpaces = rides.value.filter((ride) => ride.spacesLeft > 0);
+      if (searchQuery.value.length < 3) return ridesWithSpaces;
+      return ridesWithSpaces.filter((ride) => {
         return (
           ride.fromLocation.includes(searchQuery.value) ||
           ride.toLocation.includes(searchQuery.value)
@@ -206,7 +212,11 @@ export default {
     });
 
     async function getRide(id) {
-      await fetch(`http://localhost:9091/rideapi/rides/${id}`)
+      await fetch(`http://localhost:9091/rideapi/rides/${id}`, {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           selectedRide.value = { ...data };
@@ -228,6 +238,7 @@ export default {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${loginToken.value}`,
         },
         body: JSON.stringify(bookingData),
       })

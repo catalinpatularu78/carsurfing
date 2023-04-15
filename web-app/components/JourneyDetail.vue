@@ -24,19 +24,16 @@
         :journey-completed="journeyIsInThePast"
       ></JourneyDetailStepper>
       <div class="flex flex-col justify-between">
-        <h4 class="text-lg text-right">Driver: {{ ride.driverId }}</h4>
-        <a
-          v-if="!journeyIsInThePast"
-          class="pb-6 text-teal-500 hover:underline cursor-pointer hover:text-teal-800"
-          >Cancel booking</a
-        >
+        <h4 class="text-lg text-right">
+          {{ isDriver ? "Driving" : "Travelling as Passenger" }}
+        </h4>
         <NuxtLink
-          v-else
+          v-if="journeyIsInThePast && !isDriver"
           link="/"
           isactive="false"
           component="a"
           linkattr="href"
-          :to="`/reviews/new?reviewer=${1}`"
+          :to="`/reviews/new?reviewer=${userId}`"
           class="pb-6 text-teal-500 hover:underline cursor-pointer hover:text-teal-800"
           >Rate this journey</NuxtLink
         >
@@ -60,6 +57,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    userId: {
+      type: Number,
+      default: 0,
+    },
   },
   setup(props) {
     const journeyIsInThePast = computed(() => {
@@ -70,6 +71,8 @@ export default {
       return journeyDateTime < now;
     });
 
+    const isDriver = computed(() => props.ride.driverId === props.userId);
+
     function formatDate(date) {
       const dateLeaving = new Date(date);
       return dateLeaving.toDateString();
@@ -78,6 +81,7 @@ export default {
     return {
       journeyIsInThePast,
       formatDate,
+      isDriver,
     };
   },
 };

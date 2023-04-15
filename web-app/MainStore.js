@@ -20,6 +20,8 @@ export const useMainStore = defineStore('main', {
     },
     setIsLoggedOut() {
       this.isLoggedIn = false;
+      const loginToken = useCookie("loginToken");
+      loginToken.value = '';
     },
   },
   persist: {

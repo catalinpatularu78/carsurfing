@@ -38,7 +38,7 @@
             <div class="flex mb-3">
               <p class="text-teal-500 dark:text-gray-300 mr-16">Rating:</p>
               <p class="text-gray-500 dark:text-gray-300">
-                {{ userDetails.rating }}
+                {{ userDetails.rating ? userDetails.rating : "No ratings yet" }}
               </p>
             </div>
           </div>
@@ -56,7 +56,11 @@
             class="mb-6 p-4 border-b-2 border-teal-500"
             :class="{ 'bg-teal-50': !journeyIsInThePast(ride) }"
           >
-            <JourneyDetail :index="index" :ride="ride"></JourneyDetail>
+            <JourneyDetail
+              :index="index"
+              :ride="ride"
+              :user-id="userId"
+            ></JourneyDetail>
           </div>
         </div>
         <div>
@@ -98,13 +102,17 @@ export default {
     ]);
 
     const ridesForThisUser = computed(() => {
-      return rides.value.filter((ride) => ride.driverId === userId);
+      return rides.value.filter((ride) => ride.driverId === userId.value);
     });
 
     getRides();
 
     async function getRides() {
-      await fetch("http://localhost:9091/rideapi/rides")
+      await fetch("http://localhost:9091/rideapi/rides", {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           rides.value = data;
@@ -137,7 +145,7 @@ export default {
       fakeReviews,
       ridesForThisUser,
       journeyIsInThePast,
-      userData: computed(() => useMainStore().user),
+      userId,
     };
   },
 };
