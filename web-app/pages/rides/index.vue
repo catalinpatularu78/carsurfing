@@ -231,7 +231,7 @@ export default {
     async function requestBooking() {
       const bookingData = {
         rideId: selectedRide.value.id,
-        passengerId: 1, // TO-DO: Replace with dynamic value once login available
+        passengerId: store.userId,
       };
 
       await fetch("http://localhost:9091/rideapi/rides/booking", {
