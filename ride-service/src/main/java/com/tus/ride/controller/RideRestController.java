@@ -9,12 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-<<<<<<< Updated upstream
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-=======
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +17,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
->>>>>>> Stashed changes
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,9 +53,7 @@ public class RideRestController {
 
 	@Autowired
 	private BookingRepository bookingRepo;
-	
-	@Value("${userService.url}")
-	private String userServiceURL;
+
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -176,11 +168,9 @@ public class RideRestController {
 	}
 
 	@RequestMapping(value = "/ridesForRouteAndDate", method = RequestMethod.POST)
-<<<<<<< Updated upstream
-	public List<RideInfo> findRidePerRouteAndDate(@RequestBody Map<String, String> rideRequest) {
-=======
+
 	public ResponseEntity<?> findRidePerRouteAndDate(@RequestBody Map<String, String> rideRequest, @RequestHeader("Authorization") String header) {
->>>>>>> Stashed changes
+
 		List<Ride> rides = new ArrayList<Ride>();
 		HttpHeaders headers = new HttpHeaders();
 		
@@ -199,19 +189,7 @@ public class RideRestController {
 			}
 
 		}
-<<<<<<< Updated upstream
-		List<RideInfo> ridesInfo = new ArrayList<RideInfo>();
-		for (Ride ride : rides) {
-			User user = restTemplate.getForObject(userServiceURL + ride.getDriverId(), User.class);
-			ridesInfo.add(new RideInfo(ride, user));
-		}
-		return ridesInfo;
-	}
 
-	@GetMapping("rides/{fromLocation}/{toLocation}")
-	public List<RideInfo> findByLocation(@PathVariable("fromLocation") String fromLocation,
-			@PathVariable("toLocation") String toLocation) {
-=======
 		return ResponseEntity.ok().body(rides);
 		 }else {
 			 return ResponseEntity
@@ -223,7 +201,7 @@ public class RideRestController {
 	@GetMapping("rides/{fromLocation}/{toLocation}")
 	public ResponseEntity<?> findByLocation(@PathVariable("fromLocation") String fromLocation,
 			@PathVariable("toLocation") String toLocation, @RequestHeader("Authorization") String header) {
->>>>>>> Stashed changes
+
 		List<Ride> rides = new ArrayList<Ride>();
 		HttpHeaders headers = new HttpHeaders();
 		
@@ -240,21 +218,14 @@ public class RideRestController {
 				rides = getRidesWithSpaces(existingRides);
 			}
 		}
-<<<<<<< Updated upstream
-		List<RideInfo> ridesInfo = new ArrayList<RideInfo>();
-		for (Ride ride : rides) {
-			User user = restTemplate.getForObject(userServiceURL + ride.getDriverId(), User.class);
-			ridesInfo.add(new RideInfo(ride, user));
-		}
-		return ridesInfo;
-=======
+
 		return ResponseEntity.ok().body(rides);
 		 }else {
 			 return ResponseEntity
 			          .badRequest()
 			          .body(new String("Error: User not found!"));
 		 }
->>>>>>> Stashed changes
+
 	}
 
 	@Transactional(propagation = Propagation.MANDATORY)
