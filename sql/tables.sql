@@ -1,17 +1,32 @@
 USE carsurfing;
 
-CREATE TABLE user
-(
-  ID INT NOT NULL AUTO_INCREMENT,
-  FIRST_NAME VARCHAR(50) NOT NULL,
-  MIDDLE_NAME VARCHAR(50),
-  LAST_NAME VARCHAR(50) NOT NULL,
-  DESCRIPTION VARCHAR(256) NOT NULL,
-  EMAIL VARCHAR(50) NOT NULL UNIQUE,
-  PHONE VARCHAR(10) NOT NULL UNIQUE,
-  VERIFIED VARCHAR(10) NOT NULL,
-  PRIMARY KEY (ID)
-);
+CREATE TABLE `users` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `password` varchar(120) DEFAULT NULL,
+  `phone` bigint DEFAULT NULL,
+  `rating` double NOT NULL,
+  `username` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKr43af9ap4edm43mmtq01oddj6` (`username`),
+  UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `roles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `user_roles` (
+  `user_id` bigint NOT NULL,
+  `role_id` int NOT NULL,
+  PRIMARY KEY (`user_id`,`role_id`),
+  KEY `FKh8ciramu9cc9q3qcqiv4ue8a6` (`role_id`),
+  CONSTRAINT `FKh8ciramu9cc9q3qcqiv4ue8a6` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
+  CONSTRAINT `FKhfh9dx7w3ubf1co1vdev94g3f` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE ride
 (
@@ -39,20 +54,16 @@ CREATE TABLE bookings
   FOREIGN KEY (RIDE_ID) REFERENCES ride(ID)
 );
 
-CREATE TABLE review (
-  ID int NOT NULL AUTO_INCREMENT,
-  REVIEWER_NAME varchar(256) NOT NULL,
-  REVIEWED_ID int NOT NULL,
-  COMMENT varchar(3000) DEFAULT NULL,
-  RATING int NOT NULL,
-  PRIMARY KEY (ID),
-  KEY REVIEWER_ID (REVIEWER_NAME),
-  KEY REVIEWED_ID (REVIEWED_ID),
-  CONSTRAINT reviews_ibfk_2 FOREIGN KEY (REVIEWED_ID) REFERENCES user (ID) ON DELETE CASCADE
-);
+CREATE TABLE `review` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `comment` varchar(255) DEFAULT NULL,
+  `rating` int NOT NULL,
+  `reviewed_id` int DEFAULT NULL,
+  `reviewer_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
-insert into user values(0,'Sorcha','Jenny','Murtagh','','jennymurtagh@yahoo.com','0874123456','Yes');
-insert into user values(0,'Robert','','Smith','funny person','robertS45@yahoo.com','089977546','Yes');
-insert into user values(0,'John','Sean','Kennedy','pet owner','seankennedy777@gmail.com','087689800','Yes');
-insert into user values(0,'Mary','Diana','Fernandez','','fernandezm@gmail.com','0874343563','Yes');
+INSERT INTO roles(name) VALUES('ROLE_USER');
+INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
+INSERT INTO roles(name) VALUES('ROLE_ADMIN');
