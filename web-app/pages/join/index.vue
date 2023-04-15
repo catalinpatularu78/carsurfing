@@ -147,8 +147,10 @@
 </template>
 <script>
 import { ref, computed } from "vue";
+import { useMainStore } from "~~/MainStore";
 export default {
   setup() {
+    if (useMainStore().isLoggedIn) navigateTo("/");
     const userCreated = ref(false);
     const showError = ref(false);
     const username = ref("");

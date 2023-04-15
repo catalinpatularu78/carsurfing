@@ -42,11 +42,19 @@
             </div>
           </td>
           <td class="px-4 py-3">
-            <span
-              class="text-teal-600 hover:text-purple-600 cursor-pointer"
-              @click="null"
-              >View Profile</span
+            <NuxtLink
+              link="/"
+              isactive="false"
+              component="a"
+              linkattr="href"
+              :to="`/profiles/${1}`"
             >
+              <span
+                class="text-teal-600 hover:text-purple-600 cursor-pointer"
+                @click="null"
+                >View Profile</span
+              >
+            </NuxtLink>
           </td>
         </tr>
       </tbody>

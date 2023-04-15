@@ -23,7 +23,7 @@
     <div class="flex mb-3">
       <p class="text-gray-500 dark:text-gray-300 mr-4">Driver:</p>
       <p class="text-gray-500 dark:text-gray-300">
-        {{ ride.driverId + "  << Need to link to driver info here" }}
+        {{ ride.driverId }}
       </p>
     </div>
   </div>

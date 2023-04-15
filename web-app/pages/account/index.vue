@@ -5,7 +5,7 @@
         <h1
           class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-left py-5"
         >
-          My Profile
+          My Account
         </h1>
         <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-8" />
         <div class="flex mb-4">
@@ -51,7 +51,7 @@
           </h2>
           <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-5" />
           <div
-            v-for="(ride, index) in ridesForThisUser"
+            v-for="(ride, index) in allRides"
             :key="ride.id"
             class="mb-6 p-4 border-b-2 border-teal-500"
             :class="{ 'bg-teal-50': !journeyIsInThePast(ride) }"
@@ -59,7 +59,7 @@
             <JourneyDetail
               :index="index"
               :ride="ride"
-              :user-id="userId"
+              :username="userDetails.username"
             ></JourneyDetail>
           </div>
         </div>
@@ -70,7 +70,7 @@
             Reviews
           </h2>
           <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-5" />
-          <ReviewTable :reviews="fakeReviews"></ReviewTable>
+          <ReviewTable :reviews="reviews"></ReviewTable>
         </div>
       </div>
     </section>
@@ -92,17 +92,17 @@ export default {
     const userId = computed(() => useMainStore().userId);
     const userDetails = ref({});
     const rides = ref([]);
+    const ridesAsPassenger = ref([]);
+    const bookings = ref([]);
     const loginToken = useCookie("loginToken");
-    const fakeReviews = ref([
-      {
-        reviewerName: "Mary",
-        comment: "Really funny person",
-        rating: 5,
-      },
-    ]);
+    const reviews = ref([]);
 
-    const ridesForThisUser = computed(() => {
+    const ridesAsDriver = computed(() => {
       return rides.value.filter((ride) => ride.driverId === userId.value);
+    });
+
+    const allRides = computed(() => {
+      return [...ridesAsDriver.value, ...ridesAsPassenger.value];
     });
 
     getRides();
@@ -116,6 +116,52 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           rides.value = data;
+        });
+    }
+
+    async function getReviews() {
+      await fetch(`http://localhost:9099/reviewapi/reviews/${userId.value}`, {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          reviews.value = data;
+        });
+    }
+
+    getReviews();
+    getBookings();
+
+    async function getBookings() {
+      await fetch(
+        `http://localhost:9091/rideapi/rides/bookings/${userId.value}`,
+        {
+          headers: {
+            Authorization: `Bearer ${loginToken.value}`,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          bookings.value = data;
+          bookings.value.forEach((booking) => {
+            getRide(booking.rideId);
+          });
+        });
+    }
+
+    async function getRide(id) {
+      await fetch(`http://localhost:9091/rideapi/rides/${id}`, {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          ridesAsPassenger.value.push(data);
         });
     }
 
@@ -142,10 +188,11 @@ export default {
 
     return {
       userDetails,
-      fakeReviews,
-      ridesForThisUser,
+      reviews,
+      allRides,
       journeyIsInThePast,
       userId,
+      bookings,
     };
   },
 };

@@ -147,10 +147,10 @@
             v-else-if="bookingMadePreviously"
             class="text-purple-500 bg-purple-50 p-3 px-5 rounded-lg"
           >
-            Request sent!
+            Booked!
           </p>
           <button
-            v-else
+            v-else-if="!currentUserIsDriver(selectedRide.driverId)"
             @click="requestBooking"
             type="button"
             class="text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -184,6 +184,10 @@ export default {
       );
     });
 
+    function currentUserIsDriver(driverId) {
+      return driverId === store.userId;
+    }
+
     const loginToken = useCookie("loginToken");
 
     async function getRides() {
@@ -201,7 +205,9 @@ export default {
     getRides();
 
     const filteredRides = computed(() => {
-      const ridesWithSpaces = rides.value.filter((ride) => ride.spacesLeft > 0);
+      const ridesWithSpaces = rides.value.filter(
+        (ride) => ride.spacesLeft > 0 && !checkIsJourneyIsInThePast(ride)
+      );
       if (searchQuery.value.length < 3) return ridesWithSpaces;
       return ridesWithSpaces.filter((ride) => {
         return (
@@ -210,6 +216,14 @@ export default {
         );
       });
     });
+
+    function checkIsJourneyIsInThePast(ride) {
+      const journeyDateTime = new Date(
+        `${ride.dateOfDeparture} ${ride.estimatedDepartureTime}`
+      );
+      const now = new Date();
+      return journeyDateTime < now;
+    }
 
     async function getRide(id) {
       await fetch(`http://localhost:9091/rideapi/rides/${id}`, {
@@ -231,7 +245,7 @@ export default {
     async function requestBooking() {
       const bookingData = {
         rideId: selectedRide.value.id,
-        passengerId: 1, // TO-DO: Replace with dynamic value once login available
+        passengerId: store.userId,
       };
 
       await fetch("http://localhost:9091/rideapi/rides/booking", {
@@ -260,6 +274,7 @@ export default {
       popupOpen,
       openRideDetail,
       requestBooking,
+      currentUserIsDriver,
       bookingMadePreviously,
       bookingsRequested: computed(() => store.bookingsRequested),
     };
