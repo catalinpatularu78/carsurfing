@@ -28,7 +28,7 @@ To test with Docker run the following commands:
 
  ______________________________________userservice use cases_____________________________
  		**** 1 ****
-		to add user send POST request to resource URL http://localhost:9092/userapi/users with body
+		to add user send POST request to resource URL http://localhost:9092/api/user/users with body
 
 			(e.g. {
 		"firstName": "Alan",
@@ -41,7 +41,7 @@ To test with Docker run the following commands:
 		})
 
    **** 2 ****
-		to display all the users send GET request  to resource URL http://localhost:9092/userapi/users
+		to display all the users send GET request  to resource URL http://localhost:9092/api/user/users
 
 
 
