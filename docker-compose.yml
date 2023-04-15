@@ -16,6 +16,7 @@ services:
             WAIT_HOSTS: mysql:3306
         depends_on: 
             - carsurfing-mysql
+            - userservice-app
     userservice-app:
         container_name: userservice-app
         image: userservice
