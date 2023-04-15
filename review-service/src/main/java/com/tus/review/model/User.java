@@ -1,47 +1,57 @@
 package com.tus.review.model;
 
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class User {
 
-	private Integer id;
-	private String firstName;
-	private String middleName;
-	private String lastName;
-	private String description;
-	private String email;
-	private String phone;
-	private String verified;
+	private Long id;
 
-	public Integer getId() {
+	private String username;
+
+	private String password;
+
+	private String description;
+
+	private String email;
+
+	private Integer phone;
+
+	private String verified;
+	
+
+	public User() {
+	}
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public User(@NotBlank @Size(max = 100) String username, @NotBlank @Size(max = 100) String password,
+			@NotBlank @Size(max = 3000) String description, @NotBlank @Size(max = 100) String email,
+			@NotBlank @Size(max = 100) Integer phone, @NotBlank @Size(max = 10) String verified) {
+		this.username = username;
+		this.password = password;
+		this.description = description;
+		this.email = email;
+		this.phone = phone;
+		this.verified = verified;
+	}
+
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public String getMiddleName() {
-		return middleName;
-	}
 
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setlastName(String lastName) {
-		this.lastName = lastName;
-	}
 
 	public String getDescription() {
 		return description;
@@ -59,11 +69,11 @@ public class User {
 		this.email = email;
 	}
 
-	public String getPhone() {
+	public Integer getPhone() {
 		return phone;
 	}
 
-	public void setPhone(String phone) {
+	public void setPhone(Integer phone) {
 		this.phone = phone;
 	}
 
@@ -74,4 +84,14 @@ public class User {
 	public void setVerified(String verified) {
 		this.verified = verified;
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
 }
