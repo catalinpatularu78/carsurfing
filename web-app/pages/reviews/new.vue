@@ -5,7 +5,7 @@
       class="flex flex-col items-center my-7"
       @submit.prevent="submitCreateReview"
     >
-      <div class="max-w-sm">
+      <div class="max-w-sm min-w-[20%]">
         <h1
           class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
         >

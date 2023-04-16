@@ -10,7 +10,7 @@
       class="flex flex-col items-center my-7"
       @submit.prevent="submitCreateRide"
     >
-      <div class="max-w-sm">
+      <div class="max-w-full min-w-[25%]">
         <div class="mb-6 max-w-full">
           <label
             for="from-location"
