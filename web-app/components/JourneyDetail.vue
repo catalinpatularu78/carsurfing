@@ -24,7 +24,11 @@
         :journey-completed="journeyIsInThePast"
       ></JourneyDetailStepper>
       <div class="flex flex-col justify-between">
-        <h4 class="text-lg text-right">
+        <h4 class="text-lg text-right flex justify-center items-center">
+          <Icon
+            :name="isDriver ? 'fa-solid:car' : 'fa-solid:user-alt'"
+            class="mr-3"
+          ></Icon>
           {{ isDriver ? "Carpool Driver" : "Carpool Passenger" }}
         </h4>
         <NuxtLink
@@ -58,6 +62,10 @@ export default {
       default: () => ({}),
     },
     driverId: {
+      type: Number,
+      default: 0,
+    },
+    userId: {
       type: Number,
       default: 0,
     },

@@ -72,7 +72,7 @@
           </h2>
           <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-5" />
           <div
-            v-for="(ride, index) in allRides"
+            v-for="(ride, index) in rides"
             :key="ride.id"
             class="mb-6 p-4 border-b-2 border-teal-500"
             :class="{ 'bg-teal-50': !journeyIsInThePast(ride) }"
@@ -80,6 +80,7 @@
             <JourneyDetail
               :index="index"
               :ride="ride"
+              :user-id="userId"
               :username="userDetails.username"
             ></JourneyDetail>
           </div>
@@ -114,23 +115,13 @@ export default {
     const userId = computed(() => useMainStore().userId);
     const userDetails = ref({});
     const rides = ref([]);
-    const ridesAsPassenger = ref([]);
-    const bookings = ref([]);
     const loginToken = useCookie("loginToken");
     const reviews = ref([]);
-
-    const ridesAsDriver = computed(() => {
-      return rides.value.filter((ride) => ride.driverId === userId.value);
-    });
-
-    const allRides = computed(() => {
-      return [...ridesAsDriver.value, ...ridesAsPassenger.value];
-    });
 
     getRides();
 
     async function getRides() {
-      await fetch("http://localhost:9091/rideapi/rides", {
+      await fetch(`http://localhost:9091/rideapi/rides/users/${userId.value}`, {
         headers: {
           Authorization: `Bearer ${loginToken.value}`,
         },
@@ -154,38 +145,6 @@ export default {
     }
 
     getReviews();
-    getBookings();
-
-    async function getBookings() {
-      await fetch(
-        `http://localhost:9091/rideapi/rides/bookings/${userId.value}`,
-        {
-          headers: {
-            Authorization: `Bearer ${loginToken.value}`,
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          bookings.value = data;
-          bookings.value.forEach((booking) => {
-            getRide(booking.rideId);
-          });
-        });
-    }
-
-    async function getRide(id) {
-      await fetch(`http://localhost:9091/rideapi/rides/${id}`, {
-        headers: {
-          Authorization: `Bearer ${loginToken.value}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          ridesAsPassenger.value.push(data);
-        });
-    }
 
     getUserDetails();
     async function getUserDetails() {
@@ -211,10 +170,9 @@ export default {
     return {
       userDetails,
       reviews,
-      allRides,
+      rides,
       journeyIsInThePast,
       userId,
-      bookings,
     };
   },
 };
