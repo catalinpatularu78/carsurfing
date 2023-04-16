@@ -6,8 +6,8 @@
       View journeys
     </h1>
     <section class="p-3 sm:p-5 mb-7">
-      <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
-        <!-- Start coding here -->
+      <LoginPrompt v-if="!isLoggedIn"></LoginPrompt>
+      <div v-else class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <div class="bg-white relative sm:rounded-lg overflow-hidden">
           <div
             class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 py-4"
@@ -165,11 +165,13 @@
 <script>
 import PopUp from "~~/components/PopUp.vue";
 import RideDetails from "../../components/RideDetails.vue";
+import LoginPrompt from "~~/components/LoginPrompt.vue";
 import { useMainStore } from "~~/MainStore";
 export default {
   components: {
     PopUp,
     RideDetails,
+    LoginPrompt,
   },
   setup() {
     const store = useMainStore();
@@ -276,6 +278,7 @@ export default {
       requestBooking,
       currentUserIsDriver,
       bookingMadePreviously,
+      isLoggedIn: computed(() => store.isLoggedIn),
       bookingsRequested: computed(() => store.bookingsRequested),
     };
   },
