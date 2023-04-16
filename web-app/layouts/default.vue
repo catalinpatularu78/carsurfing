@@ -10,17 +10,6 @@
         >© 2023
         <a class="hover:underline">CarSurfing</a>
       </span>
-      <ul
-        class="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0"
-      >
-        <li>
-          <a href="#" class="mr-4 hover:underline md:mr-6">Find a Carpool</a>
-        </li>
-        <li>
-          <a href="#" class="mr-4 hover:underline md:mr-6">Create a Carpool</a>
-        </li>
-        <li><a href="#" class="mr-4 hover:underline md:mr-6">Sign Up </a></li>
-      </ul>
     </footer>
   </div>
 </template>
