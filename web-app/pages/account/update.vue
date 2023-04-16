@@ -1,78 +1,77 @@
 <template>
   <section>
     <form
-      v-if="!reviewCreated"
+      v-if="!profileUpdated"
       class="flex flex-col items-center my-7"
-      @submit.prevent="submitCreateReview"
+      @submit.prevent="submitUpdate"
     >
       <div class="max-w-sm min-w-[20%]">
         <h1
           class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
         >
-          Review your driver
+          Edit your profile
         </h1>
         <div class="grid grid-rows-1 grid-cols-8">
           <Icon
-            name="ph:steering-wheel"
+            name="material-symbols:person-pin-circle-outline-rounded"
             class="w-48 h-48 mb-4 text-teal-200 z-10 col-start-1 col-end-4 row-span-full"
           ></Icon>
           <Icon
-            name="ph:steering-wheel"
+            name="material-symbols:person-pin-circle-outline-rounded"
             class="w-48 h-48 mb-4 text-teal-400 z-20 col-start-3 col-end-6 row-span-full"
           ></Icon>
           <Icon
-            name="ph:steering-wheel"
+            name="material-symbols:person-pin-circle-outline-rounded"
             class="w-48 h-48 mb-4 text-teal-600 z-30 col-start-5 col-end-8 row-span-full"
           ></Icon>
         </div>
 
-        <div class="flex mb-5">
-          <p class="text-sm text-gray-900 font-medium mr-4">Reviewer Name:</p>
-          <p class="text-sm text-gray-900 font-medium">
-            {{ route.query.reviewer }}
-          </p>
-        </div>
         <div class="mb-6 max-w-full">
           <label
-            for="comment"
+            for="description"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Comment</label
+            >Description</label
           >
           <textarea
-            v-model="comment"
+            v-model="description"
             type="text"
-            id="from-location"
+            id="description"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-            placeholder="Tell us about your experience..."
+            placeholder="Describe yourself for other carpoolers..."
           />
         </div>
         <div class="mb-6 max-w-full">
           <label
-            for="rating"
+            for="phone"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Rating</label
+            >Phone</label
           >
-          <div class="flex items-center mt-2.5 mb-5">
-            <svg
-              v-for="item in 5"
-              :key="item"
-              aria-hidden="true"
-              :class="item <= rating ? 'text-yellow-300' : 'text-gray-200'"
-              class="w-8 h-8 cursor-pointer hover:text-yellow-300"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              @click="setRating(item)"
-            >
-              <path
-                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-              ></path>
-            </svg>
-          </div>
+          <input
+            type="tel"
+            id="phone"
+            v-model="phone"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+            placeholder="0851234567"
+            required
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="password"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Password</label
+          >
+          <input
+            type="password"
+            id="password"
+            v-model="password"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+            required
+          />
         </div>
         <ErrorMessage
           v-if="showError"
-          message="Review could not be created. Please try again."
+          message="Edit could not be made. Please try again."
           @hide-error="showError = false"
         ></ErrorMessage>
         <button
@@ -85,8 +84,8 @@
     </form>
     <SuccessMessage
       v-else
-      title="Review sent"
-      message="Thanks for taking the time to help other carpoolers"
+      title="Edit sent"
+      message="Thanks for updating your description"
     ></SuccessMessage>
   </section>
 </template>
@@ -94,6 +93,7 @@
 import { ref, computed } from "vue";
 import ErrorMessage from "~~/components/ErrorMessage.vue";
 import SuccessMessage from "~~/components/SuccessMessage.vue";
+import { useMainStore } from "~~/MainStore";
 export default {
   components: {
     ErrorMessage,
@@ -101,27 +101,27 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const reviewCreated = ref(false);
+    const profileUpdated = ref(false);
     const showError = ref(false);
-    const comment = ref("");
-    const rating = ref(0);
+    const description = ref("");
+    const password = ref("");
+    const phone = ref("");
+    const username = computed(() => useMainStore().username);
+    const email = computed(() => useMainStore().email);
 
     const data = computed(() => ({
-      comment: comment.value,
-      rating: rating.value,
-      reviewerName: route.query.reviewer,
-      reviewedId: route.query.reviewed,
+      description: description.value,
+      password: password.value,
+      phone: phone.value,
+      username: username.value,
+      email: email.value,
     }));
-
-    function setRating(item) {
-      rating.value = item;
-    }
 
     const loginToken = useCookie("loginToken");
 
-    async function submitCreateReview() {
-      await fetch("http://localhost:9099/reviewapi/reviews", {
-        method: "POST",
+    async function submitUpdate() {
+      await fetch(`http://localhost:9092/api/user/${useMainStore().userId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${loginToken.value}`,
@@ -129,7 +129,7 @@ export default {
         body: JSON.stringify(data.value),
       }).then((response) => {
         if (response) {
-          reviewCreated.value = true;
+          profileUpdated.value = true;
         } else {
           showError.value = true;
         }
@@ -137,13 +137,15 @@ export default {
     }
 
     return {
-      submitCreateReview,
-      rating,
-      comment,
-      reviewCreated,
+      submitUpdate,
+      description,
+      profileUpdated,
       showError,
-      setRating,
       route,
+      password,
+      phone,
+      username,
+      email,
     };
   },
 };

@@ -5,7 +5,7 @@
       class="flex flex-col items-center my-7"
       @submit.prevent="submitLogin"
     >
-      <div class="max-w-sm">
+      <div class="max-w-full min-w-[25%]">
         <h1
           class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
         >
@@ -22,7 +22,6 @@
             v-model="username"
             id="first-name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-            placeholder="321Username"
             required
           />
         </div>
@@ -92,7 +91,6 @@ export default {
             loginToken.value = data.accessToken;
             loginSent.value = true;
             useMainStore().setUser(data);
-            console.log();
             navigateTo("/account");
           } else {
             showError.value = true;

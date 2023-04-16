@@ -7,7 +7,6 @@ export const useMainStore = defineStore('main', {
     userId: null,
     username: null,
     email: null,
-
   }),
   actions: {
     setIsLoggedIn() {
@@ -26,6 +25,6 @@ export const useMainStore = defineStore('main', {
     },
   },
   persist: {
-    paths: ['isLoggedIn', 'bookingsRequested', 'userId'],
+    paths: ['isLoggedIn', 'bookingsRequested', 'userId', 'username', 'email'],
   },
 })

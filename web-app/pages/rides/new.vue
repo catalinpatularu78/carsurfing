@@ -1,16 +1,16 @@
 <template>
   <section>
+    <h1
+      class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
+    >
+      Create a carpool
+    </h1>
     <form
-      v-if="!rideCreated"
+      v-if="!rideCreated && isLoggedIn"
       class="flex flex-col items-center my-7"
       @submit.prevent="submitCreateRide"
     >
-      <div class="max-w-sm">
-        <h1
-          class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
-        >
-          Create a carpool
-        </h1>
+      <div class="max-w-full min-w-[25%]">
         <div class="mb-6 max-w-full">
           <label
             for="from-location"
@@ -136,21 +136,26 @@
       </div>
     </form>
     <SuccessMessage
-      v-else
+      v-else-if="isLoggedIn"
       title="New journey created"
       message="We'll let you know when new carpoolers join!"
     ></SuccessMessage>
+
+    <LoginPrompt v-else></LoginPrompt>
   </section>
 </template>
 <script>
 import { ref, computed } from "vue";
 import ErrorMessage from "~~/components/ErrorMessage.vue";
 import SuccessMessage from "~~/components/SuccessMessage.vue";
+import LoginPrompt from "~~/components/LoginPrompt.vue";
+
 import { useMainStore } from "~~/MainStore";
 export default {
   components: {
     ErrorMessage,
     SuccessMessage,
+    LoginPrompt,
   },
   setup() {
     const rideCreated = ref(false);
@@ -209,6 +214,7 @@ export default {
       spacesLeft,
       rideCreated,
       showError,
+      isLoggedIn: computed(() => useMainStore().isLoggedIn),
     };
   },
 };
