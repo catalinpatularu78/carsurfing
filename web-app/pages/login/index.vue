@@ -91,7 +91,6 @@ export default {
             loginToken.value = data.accessToken;
             loginSent.value = true;
             useMainStore().setUser(data);
-            console.log();
             navigateTo("/account");
           } else {
             showError.value = true;

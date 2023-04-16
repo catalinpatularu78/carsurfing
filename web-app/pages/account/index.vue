@@ -70,7 +70,7 @@
             Reviews
           </h2>
           <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-5" />
-          <ReviewTable v-if="reviews.leg" :reviews="reviews"></ReviewTable>
+          <ReviewTable v-if="reviews.length" :reviews="reviews"></ReviewTable>
           <p v-else class="text-gray-500 dark:text-gray-300">No reviews yet</p>
         </div>
       </div>
