@@ -8,39 +8,60 @@
           My Account
         </h1>
         <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-8" />
-        <div class="flex mb-4">
+        <div class="flex mb-4 w-full items-start">
           <FancyImage></FancyImage>
           <div>
             <div class="flex mb-3">
-              <p class="text-teal-500 dark:text-gray-300 mr-16">Username:</p>
-              <p class="text-gray-500 dark:text-gray-300">
+              <p class="text-teal-500 dark:text-gray-300 basis-32">Username:</p>
+              <p class="text-gray-500 dark:text-gray-300 basis-80">
                 {{ userDetails.username }}
               </p>
             </div>
             <div class="flex mb-3">
-              <p class="text-teal-500 dark:text-gray-300 mr-16">Email:</p>
-              <p class="text-gray-500 dark:text-gray-300">
+              <p class="text-teal-500 dark:text-gray-300 basis-32">Email:</p>
+              <p class="text-gray-500 dark:text-gray-300 basis-80">
                 {{ userDetails.email }}
               </p>
             </div>
             <div class="flex mb-3">
-              <p class="text-teal-500 dark:text-gray-300 mr-16">Description:</p>
-              <p class="text-gray-500 dark:text-gray-300">
+              <p class="text-teal-500 dark:text-gray-300 basis-32">
+                Description:
+              </p>
+              <p class="text-gray-500 dark:text-gray-300 basis-80">
                 {{ userDetails.description }}
               </p>
             </div>
             <div class="flex mb-3">
-              <p class="text-teal-500 dark:text-gray-300 mr-16">Phone:</p>
-              <p class="text-gray-500 dark:text-gray-300">
+              <p class="text-teal-500 dark:text-gray-300 basis-32">Phone:</p>
+              <p class="text-gray-500 dark:text-gray-300 basis-80">
                 {{ userDetails.phone }}
               </p>
             </div>
             <div class="flex mb-3">
-              <p class="text-teal-500 dark:text-gray-300 mr-16">Rating:</p>
-              <p class="text-gray-500 dark:text-gray-300">
+              <p class="text-teal-500 dark:text-gray-300 basis-32">
+                Avg. Rating:
+              </p>
+              <p class="text-gray-500 dark:text-gray-300 basis-80">
                 {{ userDetails.rating ? userDetails.rating : "No ratings yet" }}
               </p>
             </div>
+          </div>
+          <div
+            class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0 ml-auto"
+          >
+            <button
+              type="button"
+              class="ml-auto lex items-start justify-end text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-teal-600 dark:hover:bg-teal-700 focus:outline-none dark:focus:ring-primary-800"
+            >
+              <NuxtLink
+                link="/"
+                isactive="false"
+                component="a"
+                linkattr="href"
+                to="/account/update"
+                >Edit Profile</NuxtLink
+              >
+            </button>
           </div>
         </div>
         <div>
