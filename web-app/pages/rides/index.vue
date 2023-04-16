@@ -3,7 +3,7 @@
     <h1
       class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
     >
-      View journeys
+      View available carpools
     </h1>
     <section class="p-3 sm:p-5 mb-7">
       <LoginPrompt v-if="!isLoggedIn"></LoginPrompt>

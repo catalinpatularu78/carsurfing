@@ -124,7 +124,7 @@
         </div>
         <ErrorMessage
           v-if="showError"
-          message="New journey could not be created. Please try again."
+          message="New carpool could not be created. Please try again."
           @hide-error="showError = false"
         ></ErrorMessage>
         <button
@@ -137,7 +137,7 @@
     </form>
     <SuccessMessage
       v-else-if="isLoggedIn"
-      title="New journey created"
+      title="New carpool created"
       message="We'll let you know when new carpoolers join!"
     ></SuccessMessage>
 

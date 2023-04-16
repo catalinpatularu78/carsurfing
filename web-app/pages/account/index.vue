@@ -68,7 +68,7 @@
           <h2
             class="text-1xl font-semibold text-teal-500 lg:text-2xl dark:text-white pt-10 pb-5"
           >
-            Trips
+            My Trips
           </h2>
           <hr class="w-auto h-1 bg-teal-700 opacity-30 mb-5" />
           <div

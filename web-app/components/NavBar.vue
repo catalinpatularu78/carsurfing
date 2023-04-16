@@ -41,7 +41,7 @@
               isactive="true"
               component="a"
               linkattr="href"
-              class="block py-2 pr-4 pl-3 rounded md:p-0 bg-blue-700 md:bg-transparent text-white md:text-teal-500 dark:text-white"
+              class="block py-2 pr-4 pl-3 rounded md:p-0 bg-blue-700 md:bg-transparent text-white md:text-gray-700 dark:text-white"
               href="/"
               >Home</a
             >
@@ -54,7 +54,7 @@
               linkattr="href"
               class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-teal-500 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               to="/rides"
-              >Find Ride</NuxtLink
+              >Find Carpool</NuxtLink
             >
           </li>
           <li>
@@ -65,7 +65,7 @@
               linkattr="href"
               class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-teal-500 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               to="/rides/new"
-              >Create Ride</NuxtLink
+              >Create Carpool</NuxtLink
             >
           </li>
           <li v-if="!isLoggedIn">
@@ -123,7 +123,6 @@ import { computed } from "vue";
 export default {
   setup() {
     const store = useMainStore();
-
     return {
       isLoggedIn: computed(() => store.isLoggedIn),
       logOut: store.setIsLoggedOut,

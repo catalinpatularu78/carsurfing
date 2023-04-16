@@ -83,7 +83,7 @@
             <h1
               class="text-2xl font-semibold text-gray-700 capitalize dark:text-white"
             >
-              Find a Ride
+              Find a Carpool
             </h1>
 
             <p class="text-gray-500 dark:text-gray-300 pb-4">
@@ -143,7 +143,7 @@
             <h1
               class="text-2xl font-semibold text-gray-700 capitalize dark:text-white"
             >
-              Create a Ride
+              Create a Carpool
             </h1>
 
             <p class="text-gray-500 dark:text-gray-300 pb-4">
