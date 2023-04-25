@@ -18,24 +18,31 @@
         Join today and find your next road trip adventure or commuting buddy.
         Available throughout Ireland.
       </p>
-      <a
-        href="#"
-        class="z-10 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-teal-500 rounded-lg hover:bg-teal-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+      <NuxtLink
+        link="/"
+        isactive="false"
+        component="a"
+        linkattr="href"
+        to="/rides"
       >
-        Start CarSurfing
-        <svg
-          class="w-5 h-5 ml-2 -mr-1"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
+        <span
+          class="z-10 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-teal-500 rounded-lg hover:bg-teal-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
         >
-          <path
-            fill-rule="evenodd"
-            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
-      </a>
+          Start CarSurfing
+          <svg
+            class="w-5 h-5 ml-2 -mr-1"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </span>
+      </NuxtLink>
     </section>
     <section class="bg-white dark:bg-gray-900">
       <div class="container px-6 py-10 mx-auto flex flex-col">
@@ -79,31 +86,38 @@
               Find a Ride
             </h1>
 
-            <p class="text-gray-500 dark:text-gray-300">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
-              ab nulla quod dignissimos vel non corrupti doloribus voluptatum
-              eveniet
+            <p class="text-gray-500 dark:text-gray-300 pb-4">
+              Joining a carpool can be a cost-effective and social way to
+              travel, while also helping to alleviate traffic congestion and
+              reduce pollution.
             </p>
 
-            <a
-              href="#"
-              class="inline-flex p-2 text-purple-500 capitalize transition-colors duration-200 transform bg-purple-100 rounded-full dark:bg-blue-500 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-purple-500"
+            <NuxtLink
+              link="/"
+              isactive="false"
+              component="a"
+              linkattr="href"
+              to="/rides"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+              <span
+                class="inline-flex p-2 text-purple-500 capitalize transition-colors duration-200 transform bg-purple-100 rounded-full dark:bg-blue-500 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-purple-500"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </a>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </span>
+            </NuxtLink>
           </div>
 
           <div
@@ -132,31 +146,36 @@
               Create a Ride
             </h1>
 
-            <p class="text-gray-500 dark:text-gray-300">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
-              ab nulla quod dignissimos vel non corrupti doloribus voluptatum
-              eveniet
+            <p class="text-gray-500 dark:text-gray-300 pb-4">
+              By sharing the ride with others, you can split the cost of fuel
+              and tolls, reducing your expenses significantly.
             </p>
-
-            <a
-              href="#"
-              class="inline-flex p-2 text-purple-500 capitalize transition-colors duration-200 transform bg-purple-100 rounded-full dark:bg-blue-500 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-purple-500"
+            <NuxtLink
+              link="/"
+              isactive="false"
+              component="a"
+              linkattr="href"
+              to="/rides/new"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+              <span
+                class="inline-flex p-2 text-purple-500 capitalize transition-colors duration-200 transform bg-purple-100 rounded-full dark:bg-blue-500 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-purple-500"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </a>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </span>
+            </NuxtLink>
           </div>
 
           <div
@@ -185,31 +204,37 @@
               Review your Journey
             </h1>
 
-            <p class="text-gray-500 dark:text-gray-300">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
-              ab nulla quod dignissimos vel non corrupti doloribus voluptatum
-              eveniet
+            <p class="text-gray-500 dark:text-gray-300 pb-4">
+              Reviewing a carpool driver benefits the entire community by
+              promoting responsible and reliable carpooling practices.
             </p>
 
-            <a
-              href="#"
-              class="inline-flex p-2 text-purple-500 capitalize transition-colors duration-200 transform bg-purple-100 rounded-full dark:bg-blue-500 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-purple-500"
+            <NuxtLink
+              link="/"
+              isactive="false"
+              component="a"
+              linkattr="href"
+              to="/login"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+              <span
+                class="inline-flex p-2 text-purple-500 capitalize transition-colors duration-200 transform bg-purple-100 rounded-full dark:bg-blue-500 dark:text-white hover:underline hover:text-blue-600 dark:hover:text-purple-500"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </a>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </span>
+            </NuxtLink>
           </div>
         </div>
       </div>

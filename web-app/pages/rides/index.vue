@@ -6,8 +6,8 @@
       View journeys
     </h1>
     <section class="p-3 sm:p-5 mb-7">
-      <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
-        <!-- Start coding here -->
+      <LoginPrompt v-if="!isLoggedIn"></LoginPrompt>
+      <div v-else class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <div class="bg-white relative sm:rounded-lg overflow-hidden">
           <div
             class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 py-4"
@@ -51,19 +51,7 @@
                 type="button"
                 class="flex items-center justify-center text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-teal-600 dark:hover:bg-teal-700 focus:outline-none dark:focus:ring-primary-800"
               >
-                <svg
-                  class="h-3.5 w-3.5 mr-2"
-                  fill="currentColor"
-                  viewbox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                  />
-                </svg>
+                <Icon name="ep:plus" class="mr-2"></Icon>
                 <NuxtLink
                   link="/"
                   isactive="false"
@@ -147,10 +135,10 @@
             v-else-if="bookingMadePreviously"
             class="text-purple-500 bg-purple-50 p-3 px-5 rounded-lg"
           >
-            Request sent!
+            Booked!
           </p>
           <button
-            v-else
+            v-else-if="!currentUserIsDriver(selectedRide.driverId)"
             @click="requestBooking"
             type="button"
             class="text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -165,11 +153,13 @@
 <script>
 import PopUp from "~~/components/PopUp.vue";
 import RideDetails from "../../components/RideDetails.vue";
+import LoginPrompt from "~~/components/LoginPrompt.vue";
 import { useMainStore } from "~~/MainStore";
 export default {
   components: {
     PopUp,
     RideDetails,
+    LoginPrompt,
   },
   setup() {
     const store = useMainStore();
@@ -178,15 +168,24 @@ export default {
     const rides = ref([]);
     const selectedRide = ref({});
     const bookingMadePreviously = computed(() => {
-      console.log(store.bookingsRequested.includes(selectedRide.value.id));
       return (
         store.bookingsRequested.length > 0 &&
         store.bookingsRequested.includes(selectedRide.value.id)
       );
     });
 
+    function currentUserIsDriver(driverId) {
+      return driverId === store.userId;
+    }
+
+    const loginToken = useCookie("loginToken");
+
     async function getRides() {
-      await fetch("http://localhost:9091/rideapi/rides")
+      await fetch("http://localhost:9091/rideapi/rides", {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           rides.value = data;
@@ -196,8 +195,11 @@ export default {
     getRides();
 
     const filteredRides = computed(() => {
-      if (searchQuery.value.length < 3) return rides.value;
-      return rides.value.filter((ride) => {
+      const ridesWithSpaces = rides.value.filter(
+        (ride) => ride.spacesLeft > 0 && !checkIsJourneyIsInThePast(ride)
+      );
+      if (searchQuery.value.length < 3) return ridesWithSpaces;
+      return ridesWithSpaces.filter((ride) => {
         return (
           ride.fromLocation.includes(searchQuery.value) ||
           ride.toLocation.includes(searchQuery.value)
@@ -205,8 +207,20 @@ export default {
       });
     });
 
+    function checkIsJourneyIsInThePast(ride) {
+      const journeyDateTime = new Date(
+        `${ride.dateOfDeparture} ${ride.estimatedDepartureTime}`
+      );
+      const now = new Date();
+      return journeyDateTime < now;
+    }
+
     async function getRide(id) {
-      await fetch(`http://localhost:9091/rideapi/rides/${id}`)
+      await fetch(`http://localhost:9091/rideapi/rides/${id}`, {
+        headers: {
+          Authorization: `Bearer ${loginToken.value}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           selectedRide.value = { ...data };
@@ -221,13 +235,14 @@ export default {
     async function requestBooking() {
       const bookingData = {
         rideId: selectedRide.value.id,
-        passengerId: 1, // TO-DO: Replace with dynamic value once login available
+        passengerId: store.userId,
       };
 
       await fetch("http://localhost:9091/rideapi/rides/booking", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${loginToken.value}`,
         },
         body: JSON.stringify(bookingData),
       })
@@ -249,7 +264,9 @@ export default {
       popupOpen,
       openRideDetail,
       requestBooking,
+      currentUserIsDriver,
       bookingMadePreviously,
+      isLoggedIn: computed(() => store.isLoggedIn),
       bookingsRequested: computed(() => store.bookingsRequested),
     };
   },

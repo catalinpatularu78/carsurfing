@@ -1,16 +1,16 @@
 <template>
   <section>
+    <h1
+      class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
+    >
+      Create a carpool
+    </h1>
     <form
-      v-if="!rideCreated"
+      v-if="!rideCreated && isLoggedIn"
       class="flex flex-col items-center my-7"
       @submit.prevent="submitCreateRide"
     >
-      <div class="max-w-sm">
-        <h1
-          class="text-3xl font-semibold text-teal-500 lg:text-4xl dark:text-white text-center py-5"
-        >
-          Create a carpool
-        </h1>
+      <div class="max-w-full min-w-[25%]">
         <div class="mb-6 max-w-full">
           <label
             for="from-location"
@@ -40,7 +40,23 @@
             required
           />
         </div>
-
+        <div class="mb-6 max-w-full">
+          <label
+            for="spaces-left"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Spaces Available</label
+          >
+          <input
+            v-model="spacesLeft"
+            type="number"
+            id="spaces-left"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+            min="1"
+            max="10"
+            placeholder="3"
+            required
+          />
+        </div>
         <div class="mb-6 max-w-full">
           <label
             for="stop-1"
@@ -120,20 +136,26 @@
       </div>
     </form>
     <SuccessMessage
-      v-else
+      v-else-if="isLoggedIn"
       title="New journey created"
       message="We'll let you know when new carpoolers join!"
     ></SuccessMessage>
+
+    <LoginPrompt v-else></LoginPrompt>
   </section>
 </template>
 <script>
 import { ref, computed } from "vue";
 import ErrorMessage from "~~/components/ErrorMessage.vue";
 import SuccessMessage from "~~/components/SuccessMessage.vue";
+import LoginPrompt from "~~/components/LoginPrompt.vue";
+
+import { useMainStore } from "~~/MainStore";
 export default {
   components: {
     ErrorMessage,
     SuccessMessage,
+    LoginPrompt,
   },
   setup() {
     const rideCreated = ref(false);
@@ -156,15 +178,17 @@ export default {
       stop2: stop2.value,
       stop3: stop3.value,
       spacesLeft: spacesLeft.value,
-      // Hardcoding this for now
-      driverId: 1,
+      driverId: useMainStore().userId,
     }));
+
+    const loginToken = useCookie("loginToken");
 
     async function submitCreateRide() {
       await fetch("http://localhost:9091/rideapi/rides", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${loginToken.value}`,
         },
         body: JSON.stringify(data.value),
       })
@@ -190,6 +214,7 @@ export default {
       spacesLeft,
       rideCreated,
       showError,
+      isLoggedIn: computed(() => useMainStore().isLoggedIn),
     };
   },
 };

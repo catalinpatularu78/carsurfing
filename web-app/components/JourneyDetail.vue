@@ -24,20 +24,21 @@
         :journey-completed="journeyIsInThePast"
       ></JourneyDetailStepper>
       <div class="flex flex-col justify-between">
-        <h4 class="text-lg text-right">Driver: {{ ride.driverId }}</h4>
-        <a
-          v-if="!journeyIsInThePast"
-          class="pb-6 text-teal-500 hover:underline cursor-pointer hover:text-teal-800"
-          >Cancel booking</a
-        >
+        <h4 class="text-lg text-right flex justify-center items-center">
+          <Icon
+            :name="isDriver ? 'fa-solid:car' : 'fa-solid:user-alt'"
+            class="mr-3"
+          ></Icon>
+          {{ isDriver ? "Carpool Driver" : "Carpool Passenger" }}
+        </h4>
         <NuxtLink
-          v-else
+          v-if="journeyIsInThePast && !isDriver"
           link="/"
           isactive="false"
           component="a"
           linkattr="href"
-          :to="`/reviews/new?reviewer=${1}`"
-          class="pb-6 text-teal-500 hover:underline cursor-pointer hover:text-teal-800"
+          :to="`/reviews/new?reviewed=${ride.driverId}&reviewer=${username}`"
+          class="pb-6 text-teal-500 text-right hover:underline cursor-pointer hover:text-teal-800"
           >Rate this journey</NuxtLink
         >
       </div>
@@ -60,6 +61,18 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    driverId: {
+      type: Number,
+      default: 0,
+    },
+    userId: {
+      type: Number,
+      default: 0,
+    },
+    username: {
+      type: String,
+      default: "",
+    },
   },
   setup(props) {
     const journeyIsInThePast = computed(() => {
@@ -70,6 +83,8 @@ export default {
       return journeyDateTime < now;
     });
 
+    const isDriver = computed(() => props.ride.driverId === props.userId);
+
     function formatDate(date) {
       const dateLeaving = new Date(date);
       return dateLeaving.toDateString();
@@ -78,6 +93,7 @@ export default {
     return {
       journeyIsInThePast,
       formatDate,
+      isDriver,
     };
   },
 };
