@@ -28,22 +28,40 @@ To test with Docker run the following commands:
 
  ______________________________________userservice use cases_____________________________
  		**** 1 ****
-		to add user send POST request to resource URL http://localhost:9092/api/user/users with body
+		to add user send POST request to resource URL http://localhost:9092/api/auth/signup with body
 
 			(e.g. {
-		"firstName": "Alan",
-		"middleName": "Sergiu",
-		"lastName": "Storm",
+		"name": "Alan",
 		"description": "",
 		"email": "alanstorm@gmail.com",
 		"phone": "0875675845",
-		"verified": "Yes"
+		"password":""
 		})
 
-   **** 2 ****
+ 		**** 2 ****
+		to sign in request to resource URL http://localhost:9092/api/auth/signin with body
+
+			(e.g. {
+		"email": "alanstorm@gmail.com",
+		"password":""
+		})
+
+
+
+
+
+
+********************For all other actions user must send autentication with JWT********************************************************
+
+   		**** 3 ****
 		to display all the users send GET request  to resource URL http://localhost:9092/api/user/users
 
+ 		**** 4 ****
+		to delete a user send DELETE request  to resource URL http://localhost:9092/api/user/{id}
 
+
+ 		**** 5 ****
+		to edit a user send PUT request  to resource URL http://localhost:9092/api/user/{id}
 
 _____________________________________rideservice use cases_________________________________________________________
 		**** 1 ****
@@ -103,6 +121,24 @@ _____________________________________rideservice use cases______________________
 		2. if a ride exists with the requested ID
 		3. if the same booking for the same passenger doesn't exist
 
+		**** 7 ****
+		to edit a ride you can send a PUT request to http://localhost:9091/rideapi/rides/{rideId}.
 
+		**** 8 ****
+		to get a ride send GET request to resource  http://localhost:9091/rideapi/rides/<rideId>
 
+_____________________________________reviewervice use cases_________________________________________________________
+		**** 1 ****
+		to add a review send POST request to resource URL http://localhost:9099/reviewapi/reviews with body (example)
+	
+ 		{
+        			"reviewedId": "1"
+        			"rating": "4",
+       				 "comment": "Good Ride"
 
+    			}
+		**** 2 ****
+		to get the reviews for a certain user send GET request to resource URL http://localhost:9099/reviewapi/reviews/{reviewedId}
+
+		**** 3 ****
+		to delete a specific review send DELETE request to resource URL http://localhost:9099/reviewapi/reviews/{Id}
