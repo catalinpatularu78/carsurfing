@@ -51,7 +51,7 @@ To test with Docker run the following commands:
 
 
 
-********************For all other actions user must send autentication with JWT********************************************************
+********************For all other actions user must send autentication bearer with JWT********************
 
    		**** 3 ****
 		to display all the users send GET request  to resource URL http://localhost:9092/api/user/users
